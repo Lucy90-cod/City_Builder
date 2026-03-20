@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Builder — Nueva Ciudad</title>
+    <link rel="stylesheet" href="presentacion/estilos/Global.css">
+    <link rel="stylesheet" href="presentacion/estilos/Index.css">
+</head>
+
+<body class="pagina-inicio">
+
+    <div class="inicio-contenedor">
+
+        <!-- Logo / Titulo -->
+        <header class="inicio-header">
+            <img src="assets/fondo/logo.png" alt="City Builder" class="logo" onerror="this.style.display='none'">
+            <h1 class="titulo-juego">City Builder</h1>
+            <p class="subtitulo-juego">Construye tu Ciudad</p>
+        </header>
+
+        <!-- Formulario -->
+        <main class="formulario-contenedor">
+            <form id="form-nueva-ciudad" class="form-ciudad" novalidate>
+
+                <h2 class="form-titulo">Nueva Ciudad</h2>
+
+                <!-- Nombre ciudad -->
+                <div class="campo-grupo">
+                    <label for="nombre-ciudad" class="campo-label">
+                        Nombre de la ciudad <span class="requerido">*</span>
+                    </label>
+                    <input type="text" id="nombre-ciudad" name="nombre" class="campo-input"
+                        placeholder="Ej: Springfield" maxlength="50" required>
+                    <span class="campo-error" id="error-nombre"></span>
+                </div>
+
+                <!-- Nombre alcalde -->
+                <div class="campo-grupo">
+                    <label for="nombre-alcalde" class="campo-label">
+                        Nombre del alcalde <span class="requerido">*</span>
+                    </label>
+                    <input type="text" id="nombre-alcalde" name="alcalde" class="campo-input"
+                        placeholder="Ej: Homer Simpson" maxlength="50" required>
+                    <span class="campo-error" id="error-alcalde"></span>
+                </div>
+
+                <!-- Region -->
+                <div class="campo-grupo">
+                    <label class="campo-label">
+                        Region geográfica <span class="requerido">*</span>
+                    </label>
+
+                    <div class="modo-region">
+                        <label class="radio-label">
+                            <input type="radio" name="modo-region" value="colombia" checked>
+                            Seleccionar municipio de Colombia
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="modo-region" value="coordenadas">
+                            Ingresar coordenadas
+                        </label>
+                    </div>
+
+                    <!-- Panel Colombia -->
+                    <div id="panel-colombia" class="panel-region">
+                        <div class="campos-dobles">
+                            <div class="campo-grupo-inner">
+                                <label for="select-departamento" class="campo-label-sm">Departamento</label>
+                                <select id="select-departamento" class="campo-input">
+                                    <option value="">Cargando...</option>
+                                </select>
+                            </div>
+                            <div class="campo-grupo-inner">
+                                <label for="select-municipio" class="campo-label-sm">Municipio</label>
+                                <select id="select-municipio" class="campo-input" disabled>
+                                    <option value="">Selecciona depto primero</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel coordenadas -->
+                    <div id="panel-coordenadas" class="panel-region oculto">
+                        <div class="campos-dobles">
+                            <div class="campo-grupo-inner">
+                                <label for="input-latitud" class="campo-label-sm">Latitud</label>
+                                <input type="number" id="input-latitud" class="campo-input" placeholder="Ej: 5.06"
+                                    step="0.0001" min="-90" max="90">
+                            </div>
+                            <div class="campo-grupo-inner">
+                                <label for="input-longitud" class="campo-label-sm">Longitud</label>
+                                <input type="number" id="input-longitud" class="campo-input" placeholder="Ej: -75.51"
+                                    step="0.0001" min="-180" max="180">
+                            </div>
+                        </div>
+                        <div class="campo-grupo-inner" style="margin-top:8px">
+                            <label for="input-region-texto" class="campo-label-sm">Nombre de region</label>
+                            <input type="text" id="input-region-texto" class="campo-input"
+                                placeholder="Ej: Manizales, Caldas">
+                        </div>
+                    </div>
+                    <span class="campo-error" id="error-region"></span>
+                </div>
+
+                <!-- Tamaño del mapa -->
+                <div class="campo-grupo">
+                    <label for="select-tamano" class="campo-label">
+                        Tamaño del mapa <span class="requerido">*</span>
+                    </label>
+                    <select id="select-tamano" name="tamano" class="campo-input">
+                        <option value="15">15 x 15 — Pequeño</option>
+                        <option value="20" selected>20 x 20 — Mediano</option>
+                        <option value="25">25 x 25 — Grande</option>
+                        <option value="30">30 x 30 — Enorme</option>
+                    </select>
+                </div>
+
+                <!-- Cargar mapa desde archivo -->
+                <div class="campo-grupo">
+                    <label class="campo-label">Mapa prediseñado (opcional)</label>
+                    <div class="cargar-mapa-contenedor">
+                        <input type="file" id="input-archivo-mapa" accept=".txt" class="oculto">
+                        <button type="button" id="btn-cargar-mapa" class="btn-secundario">
+                            📂 Cargar Mapa desde .txt
+                        </button>
+                        <span id="nombre-archivo-mapa" class="archivo-nombre">Ningún archivo seleccionado</span>
+                    </div>
+                    <span class="campo-error" id="error-mapa"></span>
+                    <div id="preview-mapa" class="preview-mapa oculto"></div>
+                </div>
+
+                <!-- Recursos iniciales -->
+                <div class="recursos-iniciales">
+                    <h3>Recursos iniciales</h3>
+                    <div class="recursos-grid">
+                        <div class="recurso-inicial"><span>💰</span><span>$50,000</span></div>
+                        <div class="recurso-inicial"><span>⚡</span><span>0 (construye plantas)</span></div>
+                        <div class="recurso-inicial"><span>💧</span><span>0 (construye plantas)</span></div>
+                        <div class="recurso-inicial"><span>👥</span><span>0 ciudadanos</span></div>
+                    </div>
+                </div>
+
+                <!-- Botón submit -->
+                <button type="submit" id="btn-crear-ciudad" class="btn-primario">
+                    ¡Fundar Ciudad!
+                </button>
+
+            </form>
+        </main>
+
+    </div>
+
+    <script type="module" src="presentacion/Scripts/index.js"></script>
+</body>
+
+</html>

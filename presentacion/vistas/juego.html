@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Builder — Juego</title>
+    <link rel="stylesheet" href="../estilos/Global.css">
+    <link rel="stylesheet" href="../estilos/juego.css">
+    <link rel="stylesheet" href="../estilos/Mapa.css">
+    <link rel="stylesheet" href="../estilos/Paneles.css">
+    <link rel="stylesheet" href="../estilos/Modal.css">
+    <link rel="stylesheet" href="../estilos/Responsive.css">
+</head>
+
+<body class="pagina-juego">
+
+    <!-- HEADER -->
+    <header class="juego-header">
+        <div class="header-izq">
+            <h1 id="nombre-ciudad" class="ciudad-nombre">Ciudad</h1>
+            <span id="turno-actual" class="turno-badge">Turno 1</span>
+        </div>
+        <div class="header-centro">
+            <div class="recurso-header" id="recurso-dinero">
+                <span class="recurso-icono">💰</span>
+                <span class="recurso-valor" id="val-dinero">$50,000</span>
+            </div>
+            <div class="recurso-header" id="recurso-elec">
+                <span class="recurso-icono">⚡</span>
+                <span class="recurso-valor" id="val-electricidad">0</span>
+            </div>
+            <div class="recurso-header" id="recurso-agua">
+                <span class="recurso-icono">💧</span>
+                <span class="recurso-valor" id="val-agua">0</span>
+            </div>
+            <div class="recurso-header" id="recurso-pob">
+                <span class="recurso-icono">👥</span>
+                <span class="recurso-valor" id="val-poblacion">0</span>
+            </div>
+        </div>
+        <div class="header-der">
+            <button id="btn-pausar" class="btn-header">⏸ Pausar</button>
+            <button id="btn-guardar" class="btn-header">💾 Guardar</button>
+            <button id="btn-exportar" class="btn-header">📤 Exportar JSON</button>
+            <button id="btn-ranking" class="btn-header">🏆 Ranking</button>
+            <label class="duracion-label">
+                Turno cada
+                <input type="number" id="input-duracion" class="input-duracion" value="30" min="5" max="120"> seg
+            </label>
+        </div>
+    </header>
+
+    <!-- LAYOUT 3 COLUMNAS -->
+    <div class="layout-juego">
+
+        <!-- SIDEBAR IZQUIERDA -->
+        <aside class="sidebar-izquierda">
+            <section class="panel-construccion">
+                <h2 class="panel-titulo">Construir</h2>
+                <div class="campo-grupo-panel">
+                    <label class="panel-label">Tipo</label>
+                    <select id="select-tipo-edificio" class="select-panel">
+                        <option value="">— Selecciona —</option>
+                        <option value="residencial">🏠 Residencial</option>
+                        <option value="comercial">🏪 Comercial</option>
+                        <option value="industrial">🏭 Industrial</option>
+                        <option value="servicio">🏥 Servicio</option>
+                        <option value="planta">⚡ Planta</option>
+                        <option value="parque">🌳 Parque</option>
+                    </select>
+                </div>
+                <div id="panel-subtipo" class="campo-grupo-panel oculto">
+                    <label class="panel-label">Subtipo</label>
+                    <select id="select-subtipo-edificio" class="select-panel"></select>
+                </div>
+                <div id="info-costo-edificio" class="info-costo"></div>
+                <button id="btn-construir-via" class="btn-secundario btn-via">
+                    🛣️ Construir Via ($100)
+                </button>
+                <button id="btn-calcular-ruta" class="btn-secundario btn-ruta">
+                    🧭 Calcular Ruta
+                </button>
+                <button id="btn-cancelar" class="btn-peligro" style="display:none">
+                    ✕ Cancelar
+                </button>
+            </section>
+
+            <section class="panel-ciudadanos">
+                <h2 class="panel-titulo">Ciudadanos</h2>
+                <div class="stat-ciudadanos">
+                    <span>👥 Total</span>
+                    <span id="stat-total-ciudadanos">0</span>
+                </div>
+                <div class="stat-ciudadanos">
+                    <span>😊 Felicidad</span>
+                    <span id="stat-felicidad">50%</span>
+                </div>
+                <div class="barra-felicidad-panel">
+                    <div id="barra-felicidad-fill" class="barra-fill" style="width:50%"></div>
+                </div>
+                <div class="stat-ciudadanos">
+                    <span>🏠 Sin vivienda</span>
+                    <span id="stat-sin-vivienda">0</span>
+                </div>
+                <div class="stat-ciudadanos">
+                    <span>💼 Desempleados</span>
+                    <span id="stat-desempleados">0</span>
+                </div>
+                <div id="homer-panel" class="homer-panel"></div>
+            </section>
+        </aside>
+
+        <!-- ZONA MAPA -->
+        <main class="zona-mapa">
+            <div id="mapa-contenedor" class="mapa-contenedor">
+                <div id="mapa-grid" class="mapa-grid"></div>
+            </div>
+            <div class="score-barra">
+                <span>🏆 Score:</span>
+                <span id="val-score">0</span>
+            </div>
+        </main>
+
+        <!-- SIDEBAR DERECHA -->
+        <aside class="sidebar-derecha">
+            <section class="widget" id="panel-recursos">
+                <h2 class="panel-titulo">Recursos</h2>
+                <div id="recursos-detalle"></div>
+            </section>
+            <section class="widget">
+                <h2 class="panel-titulo">🌤 Clima</h2>
+                <div id="widget-clima">
+                    <p class="widget-placeholder">Cargando clima...</p>
+                </div>
+            </section>
+            <section class="widget">
+                <h2 class="panel-titulo">📰 Noticias</h2>
+                <div id="widget-noticias">
+                    <p class="widget-placeholder">Cargando noticias...</p>
+                </div>
+            </section>
+        </aside>
+
+    </div>
+
+    <!-- MODAL EDIFICIO -->
+    <div id="modal-overlay" class="modal-overlay"></div>
+    <div id="modal-edificio" class="modal-edificio">
+        <button id="modal-btn-cerrar" class="modal-cerrar">✕</button>
+        <img id="modal-img-edificio" src="" alt="" class="modal-imagen">
+        <h2 id="modal-nombre-edificio" class="modal-nombre"></h2>
+        <p id="modal-descripcion" class="modal-descripcion"></p>
+        <div id="modal-stats" class="modal-stats"></div>
+        <button id="modal-btn-demoler" class="btn-peligro modal-demoler">
+            🔨 Demoler
+        </button>
+    </div>
+
+    <!-- NOTIFICACIONES -->
+    <div id="notificaciones-contenedor" class="notificaciones-contenedor"></div>
+
+    <script type="module" src="../Scripts/juego.js"></script>
+</body>
+
+</html>

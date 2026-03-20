@@ -1,0 +1,263 @@
+/* ============================================================
+   global.css
+   Variables CSS, reset, tipografia y colores del tema Simpsons
+   ============================================================ */
+
+/* ── Variables del tema ────────────────────────────────────── */
+:root {
+    /* Colores principales */
+    --color-primario:     #1565C0;
+    --color-primario-dk:  #0D47A1;
+    --color-acento:       #FFD600;
+    --color-acento-dk:    #F9A825;
+    --color-peligro:      #C62828;
+    --color-exito:        #2E7D32;
+    --color-alerta:       #E65100;
+
+    /* Fondo y superficies */
+    --bg-app:             #1A1A2E;
+    --bg-panel:           #1E2A3A;
+    --bg-panel-hover:     #243447;
+    --bg-card:            #243047;
+    --bg-input:           #1A2535;
+    --bg-header:          #0D1B2A;
+
+    /* Texto */
+    --texto-primario:     #E8EDF2;
+    --texto-secundario:   #90A4AE;
+    --texto-acento:       #FFD600;
+    --texto-peligro:      #EF9A9A;
+
+    /* Bordes */
+    --borde:              rgba(255,255,255,0.08);
+    --borde-acento:       rgba(255,214,0,0.3);
+
+    /* Sombras */
+    --sombra-sm:          0 2px 8px rgba(0,0,0,0.3);
+    --sombra-md:          0 4px 16px rgba(0,0,0,0.4);
+    --sombra-lg:          0 8px 32px rgba(0,0,0,0.5);
+
+    /* Tipografia */
+    --fuente:             'Arial', sans-serif;
+    --radio:              8px;
+    --radio-lg:           12px;
+
+    /* Transiciones */
+    --transicion:         0.2s ease;
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin:     0;
+    padding:    0;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+    font-family:      var(--fuente);
+    background-color: var(--bg-app);
+    color:            var(--texto-primario);
+    min-height:       100vh;
+    line-height:      1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Tipografia ─────────────────────────────────────────────── */
+h1 { font-size: 2rem;    font-weight: 700; color: var(--texto-acento); }
+h2 { font-size: 1.25rem; font-weight: 600; }
+h3 { font-size: 1rem;    font-weight: 600; }
+p  { font-size: 0.9rem; }
+
+a { color: var(--color-primario); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Botones ─────────────────────────────────────────────────── */
+.btn-primario {
+    display:          block;
+    width:            100%;
+    padding:          14px 24px;
+    background:       var(--color-acento);
+    color:            #1A1A2E;
+    font-size:        1rem;
+    font-weight:      700;
+    border:           none;
+    border-radius:    var(--radio);
+    cursor:           pointer;
+    transition:       background var(--transicion), transform var(--transicion);
+    text-align:       center;
+}
+.btn-primario:hover  { background: var(--color-acento-dk); transform: translateY(-1px); }
+.btn-primario:active { transform: translateY(0); }
+
+.btn-secundario {
+    display:          block;
+    width:            100%;
+    padding:          10px 16px;
+    background:       transparent;
+    color:            var(--texto-primario);
+    font-size:        0.9rem;
+    border:           1px solid var(--borde);
+    border-radius:    var(--radio);
+    cursor:           pointer;
+    transition:       background var(--transicion), border-color var(--transicion);
+    text-align:       center;
+    margin-top:       8px;
+}
+.btn-secundario:hover { background: var(--bg-panel-hover); border-color: var(--borde-acento); }
+
+.btn-peligro {
+    display:          block;
+    width:            100%;
+    padding:          10px 16px;
+    background:       var(--color-peligro);
+    color:            white;
+    font-size:        0.9rem;
+    font-weight:      600;
+    border:           none;
+    border-radius:    var(--radio);
+    cursor:           pointer;
+    transition:       filter var(--transicion);
+    text-align:       center;
+    margin-top:       8px;
+}
+.btn-peligro:hover { filter: brightness(1.15); }
+
+.btn-header {
+    padding:          6px 12px;
+    background:       rgba(255,255,255,0.08);
+    color:            var(--texto-primario);
+    font-size:        0.8rem;
+    border:           1px solid var(--borde);
+    border-radius:    var(--radio);
+    cursor:           pointer;
+    transition:       background var(--transicion);
+    white-space:      nowrap;
+}
+.btn-header:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Inputs y selects ───────────────────────────────────────── */
+.campo-input, .select-panel {
+    width:            100%;
+    padding:          10px 12px;
+    background:       var(--bg-input);
+    color:            var(--texto-primario);
+    border:           1px solid var(--borde);
+    border-radius:    var(--radio);
+    font-size:        0.9rem;
+    font-family:      var(--fuente);
+    transition:       border-color var(--transicion);
+    outline:          none;
+}
+.campo-input:focus, .select-panel:focus {
+    border-color: var(--color-acento);
+}
+.campo-input::placeholder { color: var(--texto-secundario); }
+
+select.campo-input option, select.select-panel option {
+    background: var(--bg-panel);
+    color:      var(--texto-primario);
+}
+
+/* ── Utilidades ─────────────────────────────────────────────── */
+.oculto { display: none !important; }
+
+.panel-titulo {
+    font-size:     1rem;
+    font-weight:   600;
+    color:         var(--texto-acento);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--borde);
+}
+
+.widget {
+    background:    var(--bg-panel);
+    border:        1px solid var(--borde);
+    border-radius: var(--radio-lg);
+    padding:       16px;
+    margin-bottom: 16px;
+}
+
+.widget-placeholder {
+    color:     var(--texto-secundario);
+    font-size: 0.85rem;
+    text-align: center;
+    padding:   8px 0;
+}
+
+/* ── Notificaciones ─────────────────────────────────────────── */
+.notificaciones-contenedor {
+    position:       fixed;
+    bottom:         20px;
+    right:          20px;
+    z-index:        9999;
+    display:        flex;
+    flex-direction: column;
+    gap:            10px;
+    max-width:      320px;
+}
+
+.notificacion {
+    display:       flex;
+    align-items:   center;
+    gap:           10px;
+    padding:       12px 16px;
+    border-radius: var(--radio);
+    font-size:     0.9rem;
+    font-weight:   500;
+    box-shadow:    var(--sombra-md);
+    opacity:       0;
+    transform:     translateX(40px);
+    transition:    opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notificacion.visible {
+    opacity:   1;
+    transform: translateX(0);
+}
+
+.notificacion-exito    { background: var(--color-exito);    color: white; }
+.notificacion-error    { background: var(--color-peligro);  color: white; }
+.notificacion-alerta   { background: var(--color-alerta);   color: white; }
+.notificacion-info     { background: var(--color-primario); color: white; }
+.notificacion-game-over {
+    background: var(--bg-header);
+    color:      var(--texto-acento);
+    border:     2px solid var(--color-acento);
+    font-size:  1rem;
+}
+
+.notif-icono  { font-size: 1.1rem; }
+.notif-cerrar {
+    margin-left: auto;
+    background:  transparent;
+    border:      none;
+    color:       inherit;
+    cursor:      pointer;
+    opacity:     0.7;
+}
+.notif-cerrar:hover { opacity: 1; }
+
+/* ------estilos mapa--------------------------------------*/
+.cargar-mapa-contenedor {
+    display:     flex;
+    align-items: center;
+    gap:         10px;
+    flex-wrap:   wrap;
+}
+
+.archivo-nombre {
+    font-size:  0.82rem;
+    color:      var(--texto-secundario);
+    font-style: italic;
+}
+
+.preview-mapa {
+    margin-top:  10px;
+    border:      1px solid var(--borde);
+    border-radius: var(--radio);
+    overflow:    hidden;
+    gap:         0;
+}

@@ -1,0 +1,126 @@
+/* ============================================================
+   responsive.css — 3 breakpoints
+   movil  < 768px
+   tablet  768px - 1024px
+   desktop > 1024px (default)
+   ============================================================ */
+
+/* ── Tablet 768px - 1024px ──────────────────────────────────── */
+@media (max-width: 1024px) {
+
+    /* Layout juego: ocultar sidebar derecha, reducir izquierda */
+    .layout-juego {
+        grid-template-columns: 220px 1fr;
+    }
+
+    .sidebar-derecha {
+        display: none;
+    }
+
+    /* Header: ocultar algunos botones */
+    .header-der .btn-header:not(#btn-pausar):not(#btn-guardar) {
+        display: none;
+    }
+
+    /* Recursos header: reducir */
+    .recurso-header { padding: 3px 8px; }
+    .recurso-valor  { font-size: 0.78rem; }
+
+    /* Ranking tabla: ocultar columna fecha */
+    .col-fecha, .tabla-ranking td:last-child { display: none; }
+
+    /* Formulario inicio: padding reducido */
+    .formulario-contenedor { padding: 24px; }
+}
+
+/* ── Movil < 768px ──────────────────────────────────────────── */
+@media (max-width: 767px) {
+
+    /* Layout juego: una sola columna */
+    .layout-juego {
+        grid-template-columns: 1fr;
+        grid-template-rows:    auto 1fr;
+        height:                auto;
+    }
+
+    .sidebar-izquierda {
+        border-right:  none;
+        border-bottom: 1px solid var(--borde);
+        flex-direction: row;
+        flex-wrap:      wrap;
+        gap:            8px;
+        padding:        12px;
+        overflow-y:     visible;
+    }
+
+    .sidebar-izquierda .panel-construccion,
+    .sidebar-izquierda .panel-ciudadanos {
+        flex: 1;
+        min-width: 240px;
+    }
+
+    .sidebar-derecha { display: none; }
+
+    /* Header: apilar en 2 filas */
+    .juego-header {
+        grid-template-columns: 1fr;
+        grid-template-rows:    auto auto;
+        gap:                   8px;
+        padding:               10px;
+    }
+
+    .header-centro {
+        flex-wrap:       wrap;
+        justify-content: center;
+        gap:             8px;
+    }
+
+    .header-der {
+        justify-content: center;
+        flex-wrap:       wrap;
+    }
+
+    .duracion-label { display: none; }
+
+    /* Celda del mapa mas pequeña */
+    :root { --celda-size: 28px; }
+
+    /* Formulario inicio: full width */
+    .inicio-contenedor { max-width: 100%; }
+    .formulario-contenedor { padding: 16px; border-radius: var(--radio); }
+    .campos-dobles { grid-template-columns: 1fr; }
+    .modo-region   { flex-direction: column; gap: 8px; }
+    .titulo-juego  { font-size: 2rem; }
+
+    /* Ranking: tabla simplificada */
+    .col-turno, .tabla-ranking td:nth-child(5),
+    .col-fecha,  .tabla-ranking td:nth-child(6) { display: none; }
+
+    .ranking-header { flex-wrap: wrap; gap: 8px; }
+    .ranking-titulo { font-size: 1.1rem; }
+
+    .mi-ciudad-card {
+        flex-wrap: wrap;
+        gap:       8px;
+    }
+}
+
+/* ── Desktop > 1024px (ya es el default, solo ajustes extra) ── */
+@media (min-width: 1280px) {
+
+    .layout-juego {
+        grid-template-columns: 280px 1fr 280px;
+    }
+
+    :root { --celda-size: 52px; }
+
+    .ciudad-nombre { font-size: 1.2rem; }
+}
+
+@media (min-width: 1600px) {
+    :root { --celda-size: 56px; }
+
+    .layout-juego {
+        grid-template-columns: 300px 1fr 300px;
+    }
+}

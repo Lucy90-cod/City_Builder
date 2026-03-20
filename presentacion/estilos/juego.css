@@ -1,0 +1,168 @@
+/* juego.css — estilos del layout del juego */
+
+/* ── Header ─────────────────────────────────────────────────── */
+.juego-header {
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+    padding:         8px 16px;
+    background:      var(--bg-header);
+    border-bottom:   1px solid var(--borde);
+    gap:             10px;
+    flex-wrap:       nowrap;   /* ← no wrap */
+}
+
+.header-izq {
+    display:     flex;
+    align-items: center;
+    gap:         8px;
+    min-width:   fit-content;
+}
+
+.header-centro {
+    display:     flex;
+    gap:         8px;
+    flex-wrap:   nowrap;
+}
+
+.header-der {
+    display:     flex;
+    align-items: center;
+    gap:         6px;
+    flex-wrap:   nowrap;
+    min-width:   fit-content;
+}
+
+.duracion-label {
+    display:     flex;
+    align-items: center;
+    gap:         4px;
+    font-size:   0.8rem;
+    color:       var(--texto-secundario);
+    white-space: nowrap;
+}
+
+/* ── Layout 3 columnas ──────────────────────────────────────── */
+.layout-juego {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    min-height: calc(100vh - 52px);
+}
+
+.sidebar-izquierda,
+.sidebar-derecha {
+    background: var(--bg-panel);
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.sidebar-izquierda {
+    border-right: 1px solid var(--borde);
+}
+
+.sidebar-derecha {
+    border-left: 1px solid var(--borde);
+}
+
+.zona-mapa {
+    background: var(--bg-app);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Mapa ───────────────────────────────────────────────────── */
+.mapa-contenedor {
+    flex: 1;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-lg);
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background: #2d5a27;
+}
+
+.score-barra {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--texto-acento);
+    font-weight: 700;
+}
+
+/* ── Panel construccion ─────────────────────────────────────── */
+.panel-construccion,
+.panel-ciudadanos {
+    margin-bottom: 20px;
+}
+
+.campo-grupo-panel {
+    margin-bottom: 10px;
+}
+
+.panel-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--texto-secundario);
+    margin-bottom: 4px;
+}
+
+.info-costo {
+    font-size: 0.85rem;
+    color: var(--texto-acento);
+    margin: 8px 0;
+    font-weight: 600;
+}
+
+.btn-via {
+    margin-top: 8px;
+}
+
+/* ── Panel ciudadanos ───────────────────────────────────────── */
+.stat-ciudadanos {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--borde);
+    color: var(--texto-primario);
+}
+
+.barra-felicidad-panel {
+    background: var(--bg-input);
+    border-radius: 4px;
+    height: 8px;
+    margin: 8px 0;
+    overflow: hidden;
+}
+
+.barra-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f44336, #ffeb3b, #4caf50);
+    transition: width 0.5s ease;
+}
+
+.homer-panel {
+    width: 80px;
+    height: 80px;
+    margin: 12px auto 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ── Recursos detalle sidebar ───────────────────────────────── */
+.recurso-detalle-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--borde);
+    font-size: 0.85rem;
+}
+
+.recurso-detalle-item span:last-child {
+    font-weight: 700;
+    color: var(--texto-acento);
+}
+
+/* ── Noticias ────────────────────────

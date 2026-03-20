@@ -1,0 +1,134 @@
+/* ============================================================
+   ranking.css — Tabla de ranking top-10
+   ============================================================ */
+
+.pagina-ranking {
+    min-height: 100vh;
+    padding-bottom: 40px;
+}
+
+/* Header */
+.ranking-header {
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+    padding:         16px 24px;
+    background:      var(--bg-header);
+    border-bottom:   1px solid var(--borde);
+    position:        sticky;
+    top:             0;
+    z-index:         10;
+}
+
+.ranking-titulo {
+    font-size:  1.4rem;
+    color:      var(--texto-acento);
+    text-align: center;
+}
+
+.btn-sm { width: auto; padding: 6px 14px; font-size: 0.8rem; }
+
+/* Contenedor */
+.ranking-contenedor {
+    max-width: 900px;
+    margin:    32px auto;
+    padding:   0 24px;
+}
+
+/* Card ciudad actual */
+.mi-ciudad-card {
+    display:         flex;
+    align-items:     center;
+    gap:             16px;
+    background:      rgba(255, 214, 0, 0.1);
+    border:          2px solid var(--color-acento);
+    border-radius:   var(--radio-lg);
+    padding:         16px 20px;
+    margin-bottom:   24px;
+}
+
+.mi-ciudad-label {
+    font-size:    0.75rem;
+    text-transform: uppercase;
+    color:        var(--color-acento);
+    font-weight:  700;
+    letter-spacing: 1px;
+}
+
+.mi-ciudad-nombre   { font-size: 1.1rem; font-weight: 700; flex: 1; }
+.mi-ciudad-posicion { font-size: 1.5rem; font-weight: 900; color: var(--color-acento); }
+.mi-ciudad-score    { font-size: 1.1rem; font-weight: 700; color: var(--texto-acento); }
+
+/* Tabla */
+.tabla-contenedor {
+    background:    var(--bg-panel);
+    border:        1px solid var(--borde);
+    border-radius: var(--radio-lg);
+    overflow:      hidden;
+    box-shadow:    var(--sombra-md);
+}
+
+.tabla-ranking {
+    width:           100%;
+    border-collapse: collapse;
+}
+
+.tabla-ranking thead tr {
+    background: var(--bg-header);
+}
+
+.tabla-ranking th {
+    padding:        12px 16px;
+    text-align:     left;
+    font-size:      0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color:          var(--texto-secundario);
+    border-bottom:  1px solid var(--borde);
+    white-space:    nowrap;
+}
+
+.tabla-ranking td {
+    padding:     12px 16px;
+    font-size:   0.9rem;
+    border-bottom: 1px solid var(--borde);
+}
+
+.tabla-ranking tbody tr:last-child td { border-bottom: none; }
+
+.tabla-ranking tbody tr:hover {
+    background: var(--bg-panel-hover);
+}
+
+/* Fila de la ciudad actual resaltada */
+.tabla-ranking tbody tr.fila-actual {
+    background: rgba(255, 214, 0, 0.07);
+    border-left: 3px solid var(--color-acento);
+}
+
+.tabla-ranking tbody tr.fila-actual td { font-weight: 600; }
+
+/* Columnas especiales */
+.col-pos     { width: 60px;  text-align: center; }
+.col-score   { width: 120px; text-align: right;  }
+.col-turno   { width: 90px;  text-align: center; }
+.col-fecha   { width: 110px; }
+
+.tabla-ranking td:first-child { text-align: center; }
+
+/* Medallas top 3 */
+.medalla-1 { color: #FFD700; font-weight: 900; font-size: 1.1rem; }
+.medalla-2 { color: #C0C0C0; font-weight: 900; }
+.medalla-3 { color: #CD7F32; font-weight: 900; }
+
+.tabla-vacia {
+    text-align: center;
+    color:      var(--texto-secundario);
+    padding:    40px !important;
+    font-size:  0.9rem;
+}
+
+.score-valor {
+    font-weight: 700;
+    color:       var(--texto-acento);
+}

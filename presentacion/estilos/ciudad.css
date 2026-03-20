@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+}
+
+.formulario-ciudad {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formulario-ciudad h1 {
+    margin-bottom: 20px;
+}
+
+.formulario-ciudad div {
+    margin-bottom: 15px;
+}
+
+.formulario-ciudad label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.formulario-ciudad input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.formulario-ciudad button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.formulario-ciudad button:hover {
+    background-color: #1d4ed8;
+}
+
+#mensaje {
+    margin-top: 15px;
+    font-weight: bold;
+}

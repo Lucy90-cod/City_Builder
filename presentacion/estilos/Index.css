@@ -1,0 +1,247 @@
+/* ============================================================
+   index.css — Estilos pantalla de inicio / formulario
+   ============================================================ */
+
+.pagina-inicio {
+    background-image: url('../../assets/fondo/springfield_fondo.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.inicio-contenedor {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Header */
+.inicio-header {
+    text-align: center;
+}
+
+.logo {
+    width: 120px;
+    margin-bottom: 12px;
+}
+
+.titulo-juego {
+    font-size: 2.5rem;
+    color: var(--color-acento);
+    text-shadow: 0 2px 8px rgba(26, 23, 23, 0.6);
+}
+
+.subtitulo-juego {
+    color: var(--texto-secundario);
+    font-size: 1rem;
+    margin-top: 4px;
+}
+
+/* Formulario */
+.formulario-contenedor {
+    background: rgba(13, 27, 42, 0.92);
+    border: 1px solid var(--borde-acento);
+    border-radius: var(--radio-lg);
+    padding: 32px;
+    backdrop-filter: blur(8px);
+    box-shadow: var(--sombra-lg);
+}
+
+.form-titulo {
+    text-align: center;
+    margin-bottom: 24px;
+    color: var(--texto-acento);
+}
+
+.campo-grupo {
+    margin-bottom: 20px;
+}
+
+.campo-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--texto-secundario);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.campo-label-sm {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--texto-secundario);
+    margin-bottom: 4px;
+}
+
+.requerido {
+    color: var(--color-peligro);
+}
+
+.campo-error {
+    display: block;
+    color: var(--texto-peligro);
+    font-size: 0.8rem;
+    margin-top: 4px;
+    min-height: 16px;
+}
+
+.campo-input.error {
+    border-color: var(--color-peligro);
+}
+
+/* Modo region */
+.modo-region {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--texto-primario);
+}
+
+.panel-region {
+    background: var(--bg-input);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 12px;
+}
+
+.campos-dobles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.campo-grupo-inner {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Recursos iniciales */
+.recursos-iniciales {
+    background: var(--bg-card);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.recursos-iniciales h3 {
+    font-size: 0.85rem;
+    color: var(--texto-secundario);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.recursos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.recurso-inicial {
+    display: flex;
+    gap: 6px;
+    font-size: 0.85rem;
+    align-items: center;
+}
+
+/* ── Preview del mapa (agregar al final de Index.css) ──────────────────────
+   Estas clases reemplazan los style= inline que estaban en mostrarPreviewMapa.
+   La variable --celda-size la setea el JS con setProperty (no es style= inline).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+#preview-mapa {
+    display: grid;
+    grid-template-columns: repeat(attr(data-cols), var(--celda-size, 10px));
+    gap: 1px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    border-radius: 4px;
+    max-width: 300px;
+}
+
+/* Celda base del preview */
+.celda-preview {
+    width: var(--celda-size, 10px);
+    height: var(--celda-size, 10px);
+    border-radius: 1px;
+}
+
+/* Colores por tipo de token */
+.celda-grass {
+    background-color: #7cb87a;
+}
+
+.celda-road {
+    background-color: #b0a090;
+}
+
+/* Residencial */
+.celda-res1 {
+    background-color: #c8e6c9;
+}
+
+.celda-res2 {
+    background-color: #a5d6a7;
+}
+
+/* Comercial */
+.celda-com1 {
+    background-color: #fff9c4;
+}
+
+.celda-com2 {
+    background-color: #fff176;
+}
+
+/* Industrial */
+.celda-ind1 {
+    background-color: #cfd8dc;
+}
+
+.celda-ind2 {
+    background-color: #b0bec5;
+}
+
+/* Servicio */
+.celda-ser1 {
+    background-color: #bbdefb;
+}
+
+.celda-ser2 {
+    background-color: #90caf9;
+}
+
+.celda-ser3 {
+    background-color: #64b5f6;
+}
+
+/* Utilidad */
+.celda-uti1 {
+    background-color: #ffe0b2;
+}
+
+.celda-uti2 {
+    background-color: #ffcc80;
+}
+
+/* Parque */
+.celda-par1 {
+    background-color: #a5d6a7;
+}

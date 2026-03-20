@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Builder — Ranking</title>
+    <link rel="stylesheet" href="../estilos/global.css">
+    <link rel="stylesheet" href="../estilos/ranking.css">
+    <link rel="stylesheet" href="../estilos/responsive.css">
+</head>
+<body class="pagina-ranking">
+
+    <header class="ranking-header">
+        <button id="btn-volver" class="btn-header">← Volver al juego</button>
+        <h1 class="ranking-titulo">🏆 Ranking de Springfield</h1>
+        <button id="btn-limpiar" class="btn-peligro btn-sm">🗑 Limpiar</button>
+    </header>
+
+    <main class="ranking-contenedor">
+
+        <!-- Ciudad actual destacada -->
+        <div id="mi-ciudad-card" class="mi-ciudad-card oculto">
+            <span class="mi-ciudad-label">Tu ciudad</span>
+            <span id="mi-ciudad-nombre" class="mi-ciudad-nombre"></span>
+            <span id="mi-ciudad-posicion" class="mi-ciudad-posicion"></span>
+            <span id="mi-ciudad-score"   class="mi-ciudad-score"></span>
+        </div>
+
+        <!-- Tabla top 10 -->
+        <div class="tabla-contenedor">
+            <table class="tabla-ranking" id="tabla-ranking">
+                <thead>
+                    <tr>
+                        <th class="col-pos">Pos</th>
+                        <th class="col-ciudad">Ciudad</th>
+                        <th class="col-alcalde">Alcalde</th>
+                        <th class="col-score">Score</th>
+                        <th class="col-turno">Turnos</th>
+                        <th class="col-fecha">Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-tbody">
+                    <tr>
+                        <td colspan="6" class="tabla-vacia">
+                            No hay ciudades en el ranking todavia
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script type="module" src="../scripts/ranking.js"></script>
+</body>
+</html>

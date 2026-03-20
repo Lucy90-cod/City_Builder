@@ -1,0 +1,125 @@
+/* ============================================================
+   modal.css — Modal de edificio con overlay y animacion
+   ============================================================ */
+
+/* ── Overlay ────────────────────────────────────────────────── */
+.modal-overlay {
+    position:   fixed;
+    inset:      0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(3px);
+    z-index:    100;
+    opacity:    0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.visible {
+    opacity:        1;
+    pointer-events: all;
+}
+
+/* ── Modal ──────────────────────────────────────────────────── */
+.modal-edificio {
+    position:      fixed;
+    top:           50%;
+    left:          50%;
+    transform:     translate(-50%, -46%) scale(0.95);
+    opacity:       0;
+    pointer-events: none;
+    z-index:       101;
+    transition:    opacity 0.25s ease, transform 0.25s ease;
+
+    width:         min(480px, 90vw);
+    background:    var(--bg-panel);
+    border:        1px solid var(--borde-acento);
+    border-radius: var(--radio-lg);
+    padding:       28px 24px 24px;
+    box-shadow:    var(--sombra-lg);
+}
+
+.modal-edificio.visible {
+    opacity:        1;
+    pointer-events: all;
+    transform:      translate(-50%, -50%) scale(1);
+}
+
+/* Boton cerrar */
+.modal-cerrar {
+    position:   absolute;
+    top:        12px;
+    right:      14px;
+    background: transparent;
+    border:     none;
+    color:      var(--texto-secundario);
+    font-size:  1.1rem;
+    cursor:     pointer;
+    padding:    4px 8px;
+    border-radius: var(--radio);
+    transition: background var(--transicion), color var(--transicion);
+}
+
+.modal-cerrar:hover {
+    background: rgba(255,255,255,0.1);
+    color:      var(--texto-primario);
+}
+
+/* Imagen */
+.modal-imagen {
+    display:       block;
+    width:         96px;
+    height:        96px;
+    object-fit:    contain;
+    margin:        0 auto 16px;
+    filter:        drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+/* Nombre y descripcion */
+.modal-nombre {
+    font-size:   1.2rem;
+    font-weight: 700;
+    color:       var(--texto-acento);
+    text-align:  center;
+    margin-bottom: 6px;
+}
+
+.modal-descripcion {
+    font-size:   0.85rem;
+    color:       var(--texto-secundario);
+    text-align:  center;
+    margin-bottom: 16px;
+    font-style:  italic;
+}
+
+/* Stats */
+.modal-stats {
+    background:    var(--bg-card);
+    border:        1px solid var(--borde);
+    border-radius: var(--radio);
+    padding:       12px;
+    margin-bottom: 16px;
+    max-height:    240px;
+    overflow-y:    auto;
+}
+
+.stat {
+    display:         flex;
+    justify-content: space-between;
+    align-items:     center;
+    padding:         6px 4px;
+    border-bottom:   1px solid var(--borde);
+    font-size:       0.85rem;
+}
+
+.stat:last-child { border-bottom: none; }
+
+.stat span:first-child { color: var(--texto-secundario); }
+.stat span:last-child  { font-weight: 600; }
+
+.stat.consumo   span:last-child { color: #EF9A9A; }
+.stat.produccion span:last-child { color: #A5D6A7; }
+
+/* Boton demoler */
+.modal-demoler {
+    background: var(--color-peligro);
+}

@@ -1,0 +1,195 @@
+/* ============================================================
+
+   — colores por tipo de celda, hover,
+   resaltado de ruta Dijkstra y personajes Simpsons.
+   Importado desde juego.html via <link rel="stylesheet">
+   ============================================================ */
+
+/* ── Variables de celda ────────────────────────────────────── */
+:root {
+    --celda-size:        48px;
+    --celda-border:      1px solid rgba(0, 0, 0, 0.12);
+    --color-grass:       #7cb87a;
+    --color-grass-hover: #8fcf8d;
+    --color-road:        #b0a090;
+    --color-road-hover:  #c4b8a8;
+    --color-building:    transparent;  /* imagen de fondo */
+    --color-ruta:        rgba(255, 220, 0, 0.55);
+    --color-ruta-border: #f9a825;
+    --color-selected:    rgba(30, 136, 229, 0.45);
+    --shadow-celda:      inset 0 0 0 2px rgba(255,255,255,0.15);
+}
+
+/* ── Contenedor principal del mapa ─────────────────────────── */
+#mapa-contenedor {
+    display:          flex;
+    justify-content:  center;
+    align-items:      center;
+    width:            100%;
+    height:           100%;
+    overflow:         auto;
+    background-image: url('../../assets/fondo/springfield_fondo.png');
+    background-size:  cover;
+    background-position: center;
+    padding:          16px;
+    box-sizing:       border-box;
+}
+
+/* ── Grid del mapa ──────────────────────────────────────────── */
+#mapa-grid {
+    display:               grid;
+    /* Las columnas se calculan dinamicamente desde mapaRenderer.js */
+    /* grid-template-columns: repeat(15, var(--celda-size)); */
+    gap:                   0;
+    border:                2px solid rgba(0, 0, 0, 0.3);
+    border-radius:         4px;
+    box-shadow:            0 8px 32px rgba(0, 0, 0, 0.4);
+    background-color:      #5a8a58;
+}
+
+/* ── Celda base ─────────────────────────────────────────────── */
+.celda {
+    width:           var(--celda-size);
+    height:          var(--celda-size);
+    border:          var(--celda-border);
+    box-sizing:      border-box;
+    cursor:          pointer;
+    position:        relative;
+    transition:      filter 0.15s ease, box-shadow 0.15s ease;
+    background-size:     cover;
+    background-position: center;
+    background-repeat:   no-repeat;
+}
+
+/* ── Tipos de celda ─────────────────────────────────────────── */
+.celda.grass {
+    background-color: var(--color-grass);
+}
+
+.celda.road {
+    background-color: var(--color-road);
+    background-image: url('../../assets/edificios/via.png');
+}
+
+.celda.building {
+    background-color: var(--color-building);
+    /* La imagen la asigna mapaRenderer.js dinamicamente */
+}
+
+/* ── Hover ──────────────────────────────────────────────────── */
+.celda.grass:hover {
+    background-color: var(--color-grass-hover);
+    box-shadow:       var(--shadow-celda);
+    z-index:          1;
+}
+
+.celda.road:hover {
+    background-color: var(--color-road-hover);
+    filter:           brightness(1.1);
+    z-index:          1;
+}
+
+.celda.building:hover {
+    filter:    brightness(1.15) drop-shadow(0 0 4px rgba(255,255,255,0.5));
+    z-index:   1;
+    cursor:    pointer;
+}
+
+/* ── Celda seleccionada (click) ─────────────────────────────── */
+.celda.seleccionada {
+    box-shadow: inset 0 0 0 3px var(--color-selected),
+                0 0 8px rgba(30, 136, 229, 0.6);
+    z-index: 2;
+}
+
+/* ── Ruta Dijkstra resaltada ────────────────────────────────── */
+.celda.ruta {
+    background-color: var(--color-ruta) !important;
+    box-shadow:       inset 0 0 0 2px var(--color-ruta-border);
+    z-index:          2;
+    animation:        parpadeo-ruta 1s ease-in-out infinite alternate;
+}
+
+@keyframes parpadeo-ruta {
+    from { box-shadow: inset 0 0 0 2px var(--color-ruta-border); }
+    to   { box-shadow: inset 0 0 0 3px var(--color-ruta-border),
+                       0 0 10px rgba(249, 168, 37, 0.6); }
+}
+
+/* ── Personaje Simpsons en celda residencial ────────────────── */
+.celda .personaje-simpsons {
+    position:   absolute;
+    bottom:     2px;
+    right:      2px;
+    width:      20px;
+    height:     20px;
+    background-size:     contain;
+    background-repeat:   no-repeat;
+    background-position: bottom center;
+    z-index:    3;
+    pointer-events: none;   /* no interfiere con el click de la celda */
+    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
+}
+
+/* ── Modo cursor de construccion ────────────────────────────── */
+#mapa-grid.modo-construccion .celda.grass {
+    cursor: cell;
+}
+
+#mapa-grid.modo-construccion .celda.grass:hover {
+    background-color: rgba(76, 175, 80, 0.7);
+    box-shadow: inset 0 0 0 2px #4caf50;
+}
+
+#mapa-grid.modo-via .celda.grass:hover {
+    background-color: rgba(176, 160, 144, 0.8);
+    box-shadow: inset 0 0 0 2px #795548;
+    cursor: crosshair;
+}
+
+/* ── Tooltip de celda ───────────────────────────────────────── */
+.celda[data-tooltip]:hover::after {
+    content:          attr(data-tooltip);
+    position:         absolute;
+    bottom:           calc(100% + 6px);
+    left:             50%;
+    transform:        translateX(-50%);
+    background:       rgba(0, 0, 0, 0.85);
+    color:            #fff;
+    font-size:        11px;
+    font-family:      Arial, sans-serif;
+    padding:          4px 8px;
+    border-radius:    4px;
+    white-space:      nowrap;
+    z-index:          100;
+    pointer-events:   none;
+}
+
+/* ── Indicador de construccion valida / invalida ────────────── */
+.celda.valida-para-construir {
+    box-shadow: inset 0 0 0 2px #4caf50;
+}
+
+.celda.invalida-para-construir {
+    box-shadow: inset 0 0 0 2px #f44336;
+    background-color: rgba(244, 67, 54, 0.2) !important;
+}
+
+/* ── Colores especificos por tipo de edificio ───────────────── */
+/* Fallback si la imagen no carga */
+.celda.building[data-tipo="residencial"] { background-color: #22be27; }
+.celda.building[data-tipo="comercial"]   { background-color: #fff9c4; }
+.celda.building[data-tipo="industrial"]  { background-color: #cfd8dc; }
+.celda.building[data-tipo="servicio"]    { background-color: #bbdefb; }
+.celda.building[data-tipo="planta"]      { background-color: #cf6219; }
+.celda.building[data-tipo="parque"]      { background-color: #a5d6a7; }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    :root { --celda-size: 32px; }
+}
+
+@media (max-width: 480px) {
+    :root { --celda-size: 24px; }
+}
+
