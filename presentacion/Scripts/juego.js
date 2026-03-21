@@ -211,4 +211,47 @@ function registrarEventos() {
             Notificaciones.mostrarInfo(`Turno cada ${seg} segundos`);
         }
     });
+
+    // ── Atajos de teclado ────────────────────────────────────
+    document.addEventListener('keydown', (e) => {
+        // No interferir mientras se escribe en inputs/selects
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+        switch (e.key) {
+            case 'b': case 'B':
+                // Abrir menú de construcción: enfocar el selector de tipo
+                document.getElementById('select-tipo-edificio')?.focus();
+                Notificaciones.mostrarInfo('B — Menú de construcción');
+                break;
+
+            case 'r': case 'R':
+                // Modo construcción de vías
+                document.getElementById('btn-construir-via')?.click();
+                break;
+
+            case 'd': case 'D':
+                // Modo demolición
+                document.getElementById('btn-demoler')?.click();
+                break;
+
+            case 'Escape':
+                // Cancelar modo actual
+                document.getElementById('btn-cancelar')?.click();
+                break;
+
+            case ' ':
+                // Pausar / Reanudar — prevenir scroll de página
+                e.preventDefault();
+                document.getElementById('btn-pausar')?.click();
+                break;
+
+            case 's': case 'S':
+                // Guardar (solo sin Ctrl/Cmd para no sobrepasar el atajo del navegador)
+                if (!e.ctrlKey && !e.metaKey) {
+                    ctrlCiudad.guardar();
+                    Notificaciones.mostrarExito('Ciudad guardada correctamente');
+                }
+                break;
+        }
+    });
 }

@@ -42,18 +42,29 @@
     white-space: nowrap;
 }
 
+/* ── Página de juego: altura exacta de viewport, sin scroll de página ── */
+body.pagina-juego {
+    display:        flex;
+    flex-direction: column;
+    height:         100vh;
+    overflow:       hidden;
+}
+
 /* ── Layout 3 columnas ──────────────────────────────────────── */
 .layout-juego {
-    display: grid;
-    grid-template-columns: 280px 1fr 280px;
-    min-height: calc(100vh - 52px);
+    display:               grid;
+    grid-template-columns: 260px 1fr 260px;
+    flex:                  1;        /* ocupa el resto del viewport tras el header */
+    min-height:            0;        /* clave: permite que flex-child se encoja */
+    overflow:              hidden;
 }
 
 .sidebar-izquierda,
 .sidebar-derecha {
     background: var(--bg-panel);
-    padding: 16px;
+    padding:    16px;
     overflow-y: auto;
+    min-height: 0;
 }
 
 .sidebar-izquierda {
@@ -65,22 +76,22 @@
 }
 
 .zona-mapa {
-    background: var(--bg-app);
-    padding: 16px;
-    display: flex;
+    background:     var(--bg-app);
+    padding:        12px;
+    display:        flex;
     flex-direction: column;
+    min-height:     0;   /* clave: permite que el contenedor hijo haga scroll */
+    overflow:       hidden;
 }
 
 /* ── Mapa ───────────────────────────────────────────────────── */
 .mapa-contenedor {
-    flex: 1;
-    border: 1px solid var(--borde);
-    border-radius: var(--radio-lg);
-    overflow: auto;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    background: #2d5a27;
+    flex:            1;
+    min-height:      0;   /* clave: sin esto overflow:auto no funciona en flex */
+    border:          1px solid var(--borde);
+    border-radius:   var(--radio-lg);
+    overflow:        auto;
+    background:      #2d5a27;
 }
 
 .score-barra {
