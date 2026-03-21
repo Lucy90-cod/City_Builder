@@ -249,13 +249,14 @@ export class MenuConstruccion {
 
         if (subtipos.length === 0) {
             // Parque no tiene subtipo
-            this.#panelSubtipo.style.display = 'none';
+            this.#panelSubtipo.classList.add('oculto');
             this.#subtipoSeleccionado = tipo;
             this.#mostrarCosto();
             return;
         }
 
         this.#panelSubtipo.classList.remove('oculto');
+        this.#panelSubtipo.style.display = '';
         subtipos.forEach(sub => {
             const opt = document.createElement('option');
             opt.value = sub;
