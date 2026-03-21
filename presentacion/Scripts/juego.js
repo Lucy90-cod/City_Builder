@@ -17,6 +17,7 @@ import { PanelRecursos } from './PanelRecursos.js';
 import { Notificaciones } from './Notificaciones.js';
 import { renderWidgetClima } from './WidgetClima.js';
 import { WidgetNoticias } from './WidgetNoticias.js';
+import { PantallaGameOver } from './PantallaGameOver.js';
 
 let ciudad = null;
 let ctrlTurno = null;
@@ -111,11 +112,20 @@ function onTurnoCompletado(ciudadActualizada) {
     ctrlRanking.registrarCiudad(ciudad);
 }
 
-function onGameOver(ciudadFinal) {
-    Notificaciones.mostrarGameOver();
+function onGameOver(ciudadFinal, causa) {
     renderer.setModoNormal();
     document.getElementById('select-tipo-edificio').disabled = true;
-    document.getElementById('btn-construir-via').disabled = true;
+    document.getElementById('btn-construir-via').disabled    = true;
+    document.getElementById('btn-demoler').disabled          = true;
+
+    ctrlRanking.registrarGameOver(ciudadFinal);
+
+    PantallaGameOver.mostrar(
+        ciudadFinal,
+        causa,
+        () => window.location.reload(),
+        () => { window.location.href = '../../../index.html'; }
+    );
 }
 
 function manejarClickCelda(x, y, celda) {

@@ -56,7 +56,7 @@ export class ControladorRecurso {
         });
 
         recurso.updateBalance({}, totalConsumo);
-        return recurso.isGameOver();
+        return recurso.getCausaGameOver(); // null = sin game over, string = causa
     }
 
     /**

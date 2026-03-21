@@ -28,15 +28,16 @@ export class Ranking {
      * Mantiene maximo 10 entradas ordenadas.
      * @param {Object} ciudad - instancia Ciudad con getEstado()
      */
-    agregarEntrada(ciudad) {
+    agregarEntrada(ciudad, gameOver = false) {
         const estado = ciudad.getEstado();
         const entrada = {
             ciudadId: ciudad.getNombre() + '_' + ciudad.getNombreAlcalde(),
             nombre:   estado.nombre,
-            alcalde:  estado.nombreAlcalde,
+            alcalde:  estado.nombreAlcalde + (gameOver ? ' 💀' : ''),
             score:    estado.score,
             turno:    estado.turnoActual,
             fecha:    new Date().toLocaleDateString('es-CO'),
+            gameOver,
         };
 
         // Buscar si ya existe esta ciudad

@@ -29,6 +29,11 @@ export class ControladorRanking {
         RankingStorage.save(this.#ranking);
     }
 
+    registrarGameOver(ciudad) {
+        this.#ranking.agregarEntrada(ciudad, true);
+        RankingStorage.save(this.#ranking);
+    }
+
     getTop10() {
         return this.#ranking.getTop10();
     }

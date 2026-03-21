@@ -165,4 +165,158 @@
     color: var(--texto-acento);
 }
 
+/* ── Game Over ───────────────────────────────────────────────── */
+
+@keyframes gameover-shake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    15%      { transform: translate(-6px, -4px) rotate(-0.8deg); }
+    30%      { transform: translate(8px, 4px) rotate(0.8deg); }
+    45%      { transform: translate(-8px, 3px) rotate(-1deg); }
+    60%      { transform: translate(8px, -3px) rotate(1deg); }
+    75%      { transform: translate(-4px, 4px) rotate(-0.3deg); }
+    90%      { transform: translate(4px, -4px) rotate(0.3deg); }
+}
+
+@keyframes skull-float {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50%      { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes glitch {
+    0%, 90%, 100% { clip-path: none; transform: none; }
+    91%  { clip-path: inset(20% 0 30% 0); transform: translate(-4px, 0); }
+    93%  { clip-path: inset(50% 0 10% 0); transform: translate(4px, 0); }
+    95%  { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 0); }
+}
+
+.gameover-shake {
+    animation: gameover-shake 0.7s ease-in-out;
+}
+
+.gameover-overlay {
+    position:        fixed;
+    inset:           0;
+    background:      rgba(0, 0, 0, 0);
+    z-index:         9999;
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    transition:      background 0.5s ease;
+}
+
+.gameover-overlay.activo {
+    background: rgba(0, 0, 0, 0.93);
+}
+
+.gameover-panel {
+    background:    linear-gradient(145deg, #150505 0%, #2a0808 60%, #150505 100%);
+    border:        2px solid #c62828;
+    border-radius: 16px;
+    padding:       36px 40px;
+    max-width:     480px;
+    width:         90%;
+    text-align:    center;
+    color:         #fff;
+    box-shadow:    0 0 40px rgba(198, 40, 40, 0.6), 0 0 100px rgba(198, 40, 40, 0.15);
+    transform:     scale(0) rotate(-3deg);
+    transition:    transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.gameover-panel.visible {
+    transform: scale(1) rotate(0deg);
+}
+
+.gameover-skull {
+    font-size:  3.8rem;
+    display:    block;
+    animation:  skull-float 2.5s ease-in-out infinite;
+    margin-bottom: 4px;
+}
+
+.gameover-titulo {
+    font-size:   2.2rem;
+    font-weight: 900;
+    color:       #ef5350;
+    text-shadow: 0 0 12px rgba(239, 83, 80, 0.9);
+    margin:      8px 0;
+    letter-spacing: 4px;
+    animation:   glitch 4s infinite;
+}
+
+.gameover-mensaje {
+    font-size:   0.95rem;
+    color:       #ffcdd2;
+    font-style:  italic;
+    line-height: 1.6;
+    margin:      0 0 20px 0;
+    padding:     12px;
+    background:  rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    border-left: 3px solid #ef5350;
+}
+
+.gameover-stats {
+    background:    rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding:       14px 16px;
+    margin-bottom: 22px;
+    text-align:    left;
+}
+
+.gameover-stat {
+    display:        flex;
+    justify-content: space-between;
+    align-items:    center;
+    padding:        5px 0;
+    border-bottom:  1px solid rgba(255, 255, 255, 0.07);
+    font-size:      0.88rem;
+    gap:            8px;
+}
+
+.gameover-stat:last-child { border-bottom: none; }
+
+.gameover-stat span:first-child { color: #aaa; flex-shrink: 0; }
+.gameover-stat span:last-child  { color: #fff; font-weight: 700; text-align: right; }
+
+.gameover-causa-valor {
+    color:  #ff7043 !important;
+}
+
+.gameover-botones {
+    display:         flex;
+    gap:             12px;
+    justify-content: center;
+    margin-bottom:   14px;
+}
+
+.btn-go {
+    padding:       11px 22px;
+    border:        none;
+    border-radius: 8px;
+    cursor:        pointer;
+    font-size:     0.95rem;
+    font-weight:   700;
+    transition:    background 0.2s, transform 0.1s;
+}
+
+.btn-go:hover { transform: scale(1.06); }
+
+.btn-go-reintentar {
+    background: #388e3c;
+    color:      #fff;
+}
+.btn-go-reintentar:hover { background: #2e7d32; }
+
+.btn-go-menu {
+    background: #424242;
+    color:      #fff;
+}
+.btn-go-menu:hover { background: #616161; }
+
+.gameover-footer {
+    font-size: 0.75rem;
+    color:     #666;
+    margin:    0;
+}
+
 /* ── Noticias ────────────────────────

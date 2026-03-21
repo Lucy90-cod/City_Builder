@@ -55,6 +55,16 @@ export class Recurso {
         return this.#electricity < -10 || this.#water < -10;
     }
 
+    /** Retorna 'electricidad' | 'agua' | 'ambos' si hay game over, o null si no. */
+    getCausaGameOver() {
+        const sinElec = this.#electricity < -10;
+        const sinAgua = this.#water < -10;
+        if (sinElec && sinAgua) return 'ambos';
+        if (sinElec) return 'electricidad';
+        if (sinAgua) return 'agua';
+        return null;
+    }
+
     // ── Serialización ────────────────────────────────────────
     toJSON() {
         return {

@@ -100,9 +100,9 @@ export class ControladorTurno {
         this.#ctrlRecurso.calcularProduccion();
 
         // Paso 2 — Consumo → verificar game over
-        const esGameOver = this.#ctrlRecurso.calcularConsumo();
-        if (esGameOver) {
-            this.#terminarJuego();
+        const causaGameOver = this.#ctrlRecurso.calcularConsumo();
+        if (causaGameOver) {
+            this.#terminarJuego(causaGameOver);
             return;
         }
 
@@ -124,9 +124,9 @@ export class ControladorTurno {
         this.#onTurnoCompletado(this.#ciudad);
     }
 
-    #terminarJuego() {
+    #terminarJuego(causa) {
         this.pausar();
         CiudadStorage.save(this.#ciudad);
-        this.#onGameOver(this.#ciudad);
+        this.#onGameOver(this.#ciudad, causa);
     }
 }
