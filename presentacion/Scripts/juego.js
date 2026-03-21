@@ -123,17 +123,38 @@ function manejarClickCelda(x, y, celda) {
 
     if (modo === 'via') {
         menuConstr.manejarClickCelda(x, y);
-        // Actualizar panel despues de colocar via
         PanelRecursos.actualizar(ciudad);
         return;
     }
 
     if (modo === 'construccion') {
         menuConstr.manejarClickCelda(x, y);
-        // Actualizar mapa y panel despues de construir
         actualizarEdificiosMap();
         renderer.actualizarCelda(x, y);
         PanelRecursos.actualizar(ciudad);
+        return;
+    }
+
+    if (modo === 'demolicion') {
+        if (celda.isVia()) {
+            const res = ctrlMapa.eliminarVia(x, y);
+            if (res.ok) {
+                renderer.actualizarCelda(x, y);
+                PanelRecursos.actualizar(ciudad);
+                Notificaciones.mostrarExito(res.mensaje);
+            } else {
+                Notificaciones.mostrarError(res.mensaje);
+            }
+        } else if (celda.isEdificio()) {
+            const edificio = ciudad.getEdificioPorId(celda.getEdificioId());
+            if (edificio) {
+                const afectados = ciudad.getCiudadanos().filter(c =>
+                    c.getEdificioResidencialId() === edificio.getId() ||
+                    c.getEdificioTrabajoId()     === edificio.getId()
+                ).length;
+                modalEdificio.abrirConfirmacion(edificio, afectados);
+            }
+        }
         return;
     }
 

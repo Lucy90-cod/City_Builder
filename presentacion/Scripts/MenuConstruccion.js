@@ -23,6 +23,7 @@ export class MenuConstruccion {
 
     // Elementos del DOM
     #btnVia;
+    #btnDemoler;
     #btnCancelar;
     #selectTipo;
     #selectSubtipo;
@@ -76,8 +77,9 @@ export class MenuConstruccion {
      * Llamar una vez cuando el HTML este listo.
      */
     init() {
-        this.#btnVia = document.getElementById('btn-construir-via');
-        this.#btnRuta = document.getElementById('btn-calcular-ruta');
+        this.#btnVia     = document.getElementById('btn-construir-via');
+        this.#btnDemoler = document.getElementById('btn-demoler');
+        this.#btnRuta    = document.getElementById('btn-calcular-ruta');
         this.#btnRuta.addEventListener('click', () => this.#activarModoRuta());
         this.#btnCancelar = document.getElementById('btn-cancelar');
         this.#selectTipo = document.getElementById('select-tipo-edificio');
@@ -93,6 +95,9 @@ export class MenuConstruccion {
     #registrarEventos() {
         // Boton via
         this.#btnVia.addEventListener('click', () => this.#activarModoVia());
+
+        // Boton demoler
+        this.#btnDemoler.addEventListener('click', () => this.#activarModoDemolicion());
 
         // Boton cancelar
         this.#btnCancelar.addEventListener('click', () => this.#cancelar());
@@ -171,6 +176,14 @@ export class MenuConstruccion {
         this.#notificaciones.mostrarAlerta('Haz click en una celda para colocar una via ($100)');
     }
 
+    #activarModoDemolicion() {
+        this.#cancelar();
+        this.#modoActual = 'demolicion';
+        this.#renderer.setModoDemolicion(true);
+        this.#btnCancelar.style.display = 'block';
+        this.#notificaciones.mostrarAlerta('🔨 Haz click en un edificio o via para demoler');
+    }
+
     #cancelar() {
         this.#modoActual = 'normal';
         this.#tipoSeleccionado = null;
@@ -181,6 +194,9 @@ export class MenuConstruccion {
         this.#infoCosto.textContent = '';
         this.#btnCancelar.style.display = 'none';
         this.#renderer.setModoNormal();
+        this.#modoRuta = null;
+        this.#origenSeleccionado = null;
+        this.#destinoSeleccionado = null;
     }
 
     //Controlador ruta
@@ -204,7 +220,7 @@ export class MenuConstruccion {
         } else if (this.#modoActual === 'construccion') {
             this.#construir(x, y);
         }
-        // Si modo normal, lo maneja modalEdificio.js
+        // Si modo normal o demolicion, lo maneja juego.js
     }
 
     // ── Acciones ─────────────────────────────────────────────

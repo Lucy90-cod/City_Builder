@@ -112,6 +112,13 @@ export class ControladorEdificio {
         const reembolso = Math.floor(edificio.getCosto() * 0.5);
         this.#ciudad.getRecurso().addMoney(reembolso);
 
+        // Impacto en ciudadanos: quedan sin vivienda o sin empleo
+        let afectados = 0;
+        this.#ciudad.getCiudadanos().forEach(c => {
+            if (c.getEdificioResidencialId() === id) { c.quedarSinVivienda(); afectados++; }
+            if (c.getEdificioTrabajoId()     === id) { c.quedarSinEmpleo();   afectados++; }
+        });
+
         // Limpiar celda en el mapa
         const pos = edificio.getPosicion();
         const celda = this.#ciudad.getMapa().getCelda(pos.x, pos.y);
@@ -121,7 +128,9 @@ export class ControladorEdificio {
         // Quitar de la ciudad
         this.#ciudad.demolerEdificio(id);
 
-        return { ok: true, mensaje: `Edificio demolido. Reembolso: $${reembolso}` };
+        const base = `Edificio demolido. Reembolso: $${reembolso}`;
+        const mensaje = afectados > 0 ? `${base}. ${afectados} ciudadano(s) afectado(s)` : base;
+        return { ok: true, mensaje, reembolso, afectados };
     }
 
     // ── Mantenimiento ────────────────────────────────────────

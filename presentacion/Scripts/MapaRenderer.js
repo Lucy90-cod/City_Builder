@@ -137,11 +137,16 @@ export class MapaRenderer {
 
     setModoVia(activo) {
         this.#contenedor.classList.toggle('modo-via', activo);
-        this.#contenedor.classList.remove('modo-construccion');
+        this.#contenedor.classList.remove('modo-construccion', 'modo-demolicion');
+    }
+
+    setModoDemolicion(activo) {
+        this.#contenedor.classList.toggle('modo-demolicion', activo);
+        this.#contenedor.classList.remove('modo-construccion', 'modo-via');
     }
 
     setModoNormal() {
-        this.#contenedor.classList.remove('modo-construccion', 'modo-via');
+        this.#contenedor.classList.remove('modo-construccion', 'modo-via', 'modo-demolicion');
     }
 
     // ── Privados ─────────────────────────────────────────────

@@ -147,6 +147,17 @@
     cursor: crosshair;
 }
 
+#mapa-grid.modo-demolicion .celda.building:hover,
+#mapa-grid.modo-demolicion .celda.road:hover {
+    background-color: rgba(244, 67, 54, 0.35);
+    box-shadow: inset 0 0 0 2px #f44336;
+    cursor: no-drop;
+}
+
+#mapa-grid.modo-demolicion .celda.grass {
+    cursor: not-allowed;
+}
+
 /* ── Tooltip de celda ───────────────────────────────────────── */
 .celda[data-tooltip]:hover::after {
     content:          attr(data-tooltip);
