@@ -142,7 +142,7 @@ export class ControladorCiudadano {
 
     getFelicidadPromedio() {
         const ciudadanos = this.#ciudad.getCiudadanos();
-        if (ciudadanos.length === 0) return 50;
+        if (ciudadanos.length === 0) return 100;
         const suma = ciudadanos.reduce((s, c) => s + c.getFelicidad(), 0);
         return Math.round(suma / ciudadanos.length);
     }
