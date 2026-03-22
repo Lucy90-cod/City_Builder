@@ -32,6 +32,9 @@ const btnCargarMapa = document.getElementById('btn-cargar-mapa');
 const nombreArchivo = document.getElementById('nombre-archivo-mapa');
 const errorMapa = document.getElementById('error-mapa');
 const previewMapa = document.getElementById('preview-mapa');
+const inputArchivoJson = document.getElementById('input-archivo-ciudad-json');
+const btnCargarJson = document.getElementById('btn-cargar-json');
+const nombreArchivoJson = document.getElementById('nombre-archivo-json');
 
 // Tabla de clases CSS por token — en lugar de style= inline
 // Las clases deben estar definidas en Index.css
@@ -47,6 +50,7 @@ const CLASES_TOKEN = {
 };
 
 let mapaTexto = null;  // guarda el contenido del .txt
+let datosCiudadJson = null; // aquí guardarás el objeto parseado, o null si no hay archivo válido
 
 // Estado del formulario
 let modoRegion = 'colombia';
@@ -156,6 +160,8 @@ function registrarEventos() {
             }
 
             mapaTexto = texto;
+            datosCiudadJson = null;
+            nombreArchivoJson.textContent = 'Ningún archivo .json';
             errorMapa.textContent = '';
             nombreArchivo.textContent = archivo.name;
             mostrarPreviewMapa(texto);
@@ -163,7 +169,46 @@ function registrarEventos() {
         reader.readAsText(archivo);
     });
 
-    // Submit del formulario
+    // Cargar ciudad desde JSON (export de Ciudad.toJSON)
+    btnCargarJson?.addEventListener('click', () => inputArchivoJson?.click());
+
+    inputArchivoJson?.addEventListener('change', () => {
+        const archivo = inputArchivoJson.files[0];
+        if (!archivo) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const texto = e.target.result;
+                const data = JSON.parse(texto);
+
+                if (!data || typeof data !== 'object')
+                    throw new Error('El archivo no contiene un objeto JSON válido.');
+
+                if (!data.nombre && !data.mapa)
+                    throw new Error('No parece un guardado de ciudad reconocible.');
+
+                datosCiudadJson = data;
+                nombreArchivoJson.textContent = archivo.name;
+                errorMapa.textContent = '';
+
+                mapaTexto = null;
+                nombreArchivo.textContent = 'Ningún archivo seleccionado';
+                previewMapa?.classList.add('oculto');
+
+            } catch (err) {
+                datosCiudadJson = null;
+                nombreArchivoJson.textContent = 'Archivo inválido';
+                errorMapa.textContent = err.message || 'JSON inválido';
+            }
+        };
+        reader.onerror = () => {
+            datosCiudadJson = null;
+            nombreArchivoJson.textContent = 'Error al leer el archivo';
+        };
+        reader.readAsText(archivo, 'UTF-8');
+    });
+
     form.addEventListener('submit', manejarSubmit);
 }
 
@@ -172,6 +217,24 @@ function registrarEventos() {
 function manejarSubmit(e) {
     e.preventDefault();
     limpiarErrores();
+
+    if (datosCiudadJson) {
+        try {
+            const ciudad = ctrlCiudad.importarDesdeJSON(datosCiudadJson);
+            if (!ciudad) {
+                mostrarErrorFormulario('No se pudo importar el JSON.');
+                return;
+            }
+
+            ctrlJugador.crearJugador(ciudad.getNombreAlcalde());
+            ctrlCiudad.guardar();
+            window.location.href = 'presentacion/vistas/juego.html';
+            return;
+        } catch (err) {
+            mostrarErrorFormulario(err.message || 'Error al importar la ciudad.');
+            return;
+        }
+    }
 
     if (modoRegion === 'coordenadas') {
         latitudFinal = parseFloat(inputLatitud.value);
@@ -200,7 +263,6 @@ function manejarSubmit(e) {
             const ctrlEdificio = new ControladorEdificio(ciudad);
             ctrlMapa.cargarDesdeTexto(mapaTexto, ctrlEdificio);
 
-            // Calcular recursos iniciales basandose en edificios del mapa cargado
             const recurso = ciudad.getRecurso();
             const produccionTotal = { money: 0, electricity: 0, water: 0, food: 0 };
 

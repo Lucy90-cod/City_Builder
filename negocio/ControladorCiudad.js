@@ -12,6 +12,7 @@ import { Industrial }    from '../modelos/Industrial.js';
 import { Servicio }      from '../modelos/Servicio.js';
 import { Planta }        from '../modelos/Planta.js';
 import { Parque }        from '../modelos/Parque.js';
+import { Ciudadano }     from '../modelos/Ciudadano.js';
 import { CiudadStorage } from '../acceso_datos/CiudadStorage.js';
 
 export class ControladorCiudad {
@@ -108,6 +109,8 @@ export class ControladorCiudad {
             });
         }
 
+        this.#reconstruirCiudadanos(this.#ciudad);
+
         return this.#ciudad;
     }
 
@@ -133,6 +136,18 @@ export class ControladorCiudad {
         }
     }
 
+    #reconstruirCiudadanos(ciudad) {
+        const lista = ciudad._ciudadanosData;
+        if (!lista?.length) return;
+        lista.forEach(d => {
+            try {
+                ciudad.agregarCiudadano(Ciudadano.fromJSON(d));
+            } catch (e) {
+                console.error('Error reconstruyendo ciudadano:', e.message);
+            }
+        });
+    }
+
     hayPartidaGuardada()  { return CiudadStorage.hayPartida(); }
     eliminarPartida()     { CiudadStorage.delete(); }
     getCiudadActual()     { return this.#ciudad; }
@@ -148,4 +163,40 @@ export class ControladorCiudad {
         a.click();
         URL.revokeObjectURL(url);
     }
+
+    /**
+     * Restaura una ciudad desde un objeto ya parseado (mismo formato que Ciudad.toJSON()).
+     * Reutiliza la misma reconstruccion que cargar() desde LocalStorage.
+     * @returns {Ciudad|null}
+     */
+    importarDesdeJSON(data) {
+        if (!data || typeof data !== 'object') return null;
+
+        this.#ciudad = Ciudad.fromJSON(data);
+
+        if (this.#ciudad._recursoData) {
+            this.#ciudad.setRecurso(Recurso.fromJSON(this.#ciudad._recursoData));
+        } else {
+            this.#ciudad.setRecurso(new Recurso(50000, 100, 100, 0));
+        }
+
+        if (this.#ciudad._puntuacionData) {
+            this.#ciudad.setPuntuacion(Puntuacion.fromJSON(this.#ciudad._puntuacionData));
+        } else {
+            this.#ciudad.setPuntuacion(new Puntuacion());
+        }
+
+        if (this.#ciudad._edificiosData?.length > 0) {
+            this.#ciudad._edificiosData.forEach(eData => {
+                const edificio = this.#reconstruirEdificio(eData);
+                if (edificio) this.#ciudad.agregarEdificio(edificio);
+            });
+        }
+
+        this.#reconstruirCiudadanos(this.#ciudad);
+
+        return this.#ciudad;
+    }
+
 }
+

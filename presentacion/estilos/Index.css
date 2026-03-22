@@ -245,3 +245,17 @@
 .celda-par1 {
     background-color: #a5d6a7;
 }
+
+.cargar-json-fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--borde);
+}
+.cargar-json-fila .archivo-nombre {
+    font-size: 0.8rem;
+    color: var(--texto-secundario);
+}
