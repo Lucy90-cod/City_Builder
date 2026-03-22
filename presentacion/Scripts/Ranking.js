@@ -53,6 +53,8 @@ function renderizarTabla(top10, ciudadActualId) {
                 <td>${entrada.nombre}</td>
                 <td>${entrada.alcalde}</td>
                 <td class="score-valor">${entrada.score.toLocaleString('es-CO')}</td>
+                <td>${entrada.poblacion ?? 0}</td>
+                <td>${entrada.felicidad ?? 0}%</td>
                 <td style="text-align:center">${entrada.turno}</td>
                 <td>${entrada.fecha ?? '—'}</td>
             </tr>

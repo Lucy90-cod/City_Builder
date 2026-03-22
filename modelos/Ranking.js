@@ -30,13 +30,23 @@ export class Ranking {
      */
     agregarEntrada(ciudad, gameOver = false) {
         const estado = ciudad.getEstado();
+
+        const ciudadanos = ciudad.getCiudadanos();
+
+        const felicidadProm = ciudadanos.length > 0
+        ? ciudadanos.reduce((sum, c) => sum + c.getFelicidad(), 0) / ciudadanos.length
+        : 0;
+
         const entrada = {
             ciudadId: ciudad.getNombre() + '_' + ciudad.getNombreAlcalde(),
             nombre:   estado.nombre,
             alcalde:  estado.nombreAlcalde + (gameOver ? ' 💀' : ''),
             score:    estado.score,
             turno:    estado.turnoActual,
+            poblacion: estado.poblacion,
+            felicidad: Math.round(felicidadProm),
             fecha:    new Date().toLocaleDateString('es-CO'),
+
             gameOver,
         };
 
