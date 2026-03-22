@@ -36,35 +36,83 @@ export class PanelRecursos {
 
         // ── Sidebar derecha — detalle ─────────────────────
         const contenedor = document.getElementById('recursos-detalle');
+        const desglose = ciudad.getPuntuacion()?.getDesglose(ciudad);
+        
         if (contenedor) {
-            contenedor.innerHTML = `
+        contenedor.innerHTML = `
+            <div class="recurso-detalle-item">
+                <span class="recurso-detalle-nombre">💰 Dinero</span>
+                <span class="recurso-detalle-valor ${recurso.getMoney() < 0 ? 'negativo' : ''}">
+                    $${recurso.getMoney().toLocaleString('es-CO')}
+                </span>
+            </div>
+
+            <div class="recurso-detalle-item">
+                <span class="recurso-detalle-nombre">⚡ Electricidad</span>
+                <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(recurso.getElectricity())}">
+                    ${recurso.getElectricity()}
+                </span>
+            </div>
+
+            <div class="recurso-detalle-item">
+                <span class="recurso-detalle-nombre">💧 Agua</span>
+                <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(recurso.getWater())}">
+                    ${recurso.getWater()}
+                </span>
+            </div>
+
+            <div class="recurso-detalle-item">
+                <span class="recurso-detalle-nombre">🌽 Alimentos</span>
+                <span class="recurso-detalle-valor">${recurso.getFood()}</span>
+            </div>
+
+            <div class="recurso-detalle-item">
+                <span class="recurso-detalle-nombre">🏗️ Edificios</span>
+                <span class="recurso-detalle-valor">${estado.edificios}</span>
+            </div>
+
+            <!-- 🔥 DESGLOSE DE SCORE -->
+            ${desglose ? `
+                <hr>
+
                 <div class="recurso-detalle-item">
-                    <span class="recurso-detalle-nombre">💰 Dinero</span>
-                    <span class="recurso-detalle-valor ${recurso.getMoney() < 0 ? 'negativo' : ''}">
-                        $${recurso.getMoney().toLocaleString('es-CO')}
-                    </span>
+                    <span>👥 Población</span>
+                    <span>${desglose.poblacion} (+${desglose.poblacion * 10})</span>
                 </div>
+
                 <div class="recurso-detalle-item">
-                    <span class="recurso-detalle-nombre">⚡ Electricidad</span>
-                    <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(recurso.getElectricity())}">
-                        ${recurso.getElectricity()}
-                    </span>
+                    <span>😊 Felicidad</span>
+                    <span>${desglose.felicidadAvg} (+${desglose.felicidadAvg * 5})</span>
                 </div>
+
                 <div class="recurso-detalle-item">
-                    <span class="recurso-detalle-nombre">💧 Agua</span>
-                    <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(recurso.getWater())}">
-                        ${recurso.getWater()}
-                    </span>
+                    <span>🏗️ Edificios</span>
+                    <span>${desglose.numEdificios} (+${desglose.numEdificios * 50})</span>
                 </div>
+
                 <div class="recurso-detalle-item">
-                    <span class="recurso-detalle-nombre">🌽 Alimentos</span>
-                    <span class="recurso-detalle-valor">${recurso.getFood()}</span>
+                    <span>💰 Dinero</span>
+                    <span>${desglose.dinero} (+${Math.floor(desglose.dinero / 100)})</span>
                 </div>
+            ` : ''}
+                    ${desglose?.penalizaciones?.length ? `
+                <hr>
                 <div class="recurso-detalle-item">
-                    <span class="recurso-detalle-nombre">🏗️ Edificios</span>
-                    <span class="recurso-detalle-valor">${estado.edificios}</span>
+                    <strong>⚠️ Penalizaciones</strong>
                 </div>
+
+                ${desglose.penalizaciones.map(p => `
+                    <div class="recurso-detalle-item">
+                        <span>${p.nombre}</span>
+                        <span class="negativo">${p.valor}</span>
+                    </div>
+                `).join('')}
+            ` : ''}
+        
+        
             `;
+        
+        
         }
 
         // ── Panel ciudadanos ──────────────────────────────

@@ -99,21 +99,59 @@ export class Puntuacion {
      */
     getDesglose(ciudad) {
         if (!ciudad) return {};
+
         const recurso    = ciudad.getRecurso();
         const ciudadanos = ciudad.getCiudadanos();
-        const poblacion  = ciudadanos.length;
+        const edificios  = ciudad.getEdificios();
+
+        const poblacion = ciudadanos.length;
+        const dinero = recurso?.getMoney() ?? 0;
+        const electricidad = recurso?.getElectricity() ?? 0;
+        const agua = recurso?.getWater() ?? 0;
+
         const felicidadAvg = poblacion > 0
             ? ciudadanos.reduce((sum, c) => sum + c.getFelicidad(), 0) / poblacion
             : 50;
 
+        const desempleados = ciudadanos.filter(c => !c.tieneEmpleo()).length;
+
+        // 🔴 Penalizaciones
+        let penalizaciones = [];
+
+        if (dinero < 0) {
+            penalizaciones.push({ nombre: 'Dinero negativo', valor: -500 });
+        }
+
+        if (electricidad < 0) {
+            penalizaciones.push({ nombre: 'Electricidad negativa', valor: -300 });
+        }
+
+        if (agua < 0) {
+            penalizaciones.push({ nombre: 'Agua negativa', valor: -300 });
+        }
+
+        if (felicidadAvg < 40) {
+            penalizaciones.push({ nombre: 'Baja felicidad', valor: -400 });
+        }
+
+        if (desempleados > 0) {
+            penalizaciones.push({
+                nombre: 'Desempleo',
+                valor: -(desempleados * 10)
+            });
+        }
+
         return {
-            poblacion:     poblacion,
-            felicidadAvg:  Math.round(felicidadAvg),
-            dinero:        recurso?.getMoney()       ?? 0,
-            electricidad:  recurso?.getElectricity() ?? 0,
-            agua:          recurso?.getWater()       ?? 0,
-            numEdificios:  ciudad.getEdificios().length,
-            scoreActual:   this.#scoreActual,
+            poblacion,
+            felicidadAvg: Math.round(felicidadAvg),
+            dinero,
+            electricidad,
+            agua,
+            numEdificios: edificios.length,
+            scoreActual: this.#scoreActual,
+
+            // 🔥 nuevo
+            penalizaciones
         };
     }
 

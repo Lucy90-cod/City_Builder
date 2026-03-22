@@ -112,6 +112,10 @@ export class ControladorTurno {
         // Paso 4 — Felicidad + crecimiento
         this.#ctrlCiudadano.actualizarFelicidad();
         this.#ctrlCiudadano.crearCiudadanos();
+        
+        // Reasignacion de viviendas, empleos
+        this.#ctrlCiudadano.asignarViviendas();
+        this.#ctrlCiudadano.asignarEmpleos();
 
         // Paso 5 — Puntuacion
         this.#ctrlPuntuacion.calcular();
