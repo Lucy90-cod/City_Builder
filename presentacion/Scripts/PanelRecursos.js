@@ -21,6 +21,9 @@ export class PanelRecursos {
         PanelRecursos.#colorearDinero('val-dinero', recurso.getMoney());
         PanelRecursos.#setValor('val-electricidad', recurso.getElectricity().toLocaleString());
         PanelRecursos.#setValor('val-agua',         recurso.getWater().toLocaleString());
+        PanelRecursos.#setTooltip('val-electricidad', ciudad, 'electricidad');
+        PanelRecursos.#setTooltip('val-agua', ciudad, 'agua');
+        PanelRecursos.#setTooltip('val-dinero', ciudad, 'dinero');
         PanelRecursos.#setValor('val-poblacion',    estado.poblacion);
         PanelRecursos.#setValor('val-score',        estado.score.toLocaleString());
         PanelRecursos.#setValor('turno-actual',     `Turno ${ciudad.getTurnoActual()}`);
@@ -120,4 +123,41 @@ export class PanelRecursos {
         el.classList.add('dinero-amarillo');
     }
     }
+
+static #setTooltip(id, ciudad, tipo) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    let produccion = 0;
+    let consumo = 0;
+
+    ciudad.getEdificios().forEach(e => {
+        const prod = e.calcularProduccion();
+        const cons = e.calcularConsumo();
+
+        if (tipo === 'electricidad') {
+            produccion += prod.electricity || 0;
+            consumo    += cons.electricidad || 0;
+        }
+
+        if (tipo === 'agua') {
+            produccion += prod.water || 0;
+            consumo    += cons.agua || 0;
+        }
+
+        if (tipo === 'dinero') {
+            produccion += prod.money || 0;
+            consumo    += e.getCostoMantenimiento() || 0;
+        }
+    });
+
+    const balance = produccion - consumo;
+
+    el.title =
+        `Producción: ${produccion}\n` +
+        `Consumo: ${consumo}\n` +
+        `Balance: ${balance}`;
 }
+
+}
+
