@@ -104,6 +104,17 @@ export class ControladorEdificio {
      * @param {string} id
      * @returns {{ ok: boolean, mensaje: string }}
      */
+
+    calcularAfectados(id) {
+    let afectados = 0;
+
+    this.#ciudad.getCiudadanos().forEach(c => {
+        if (c.getEdificioResidencialId() === id) afectados++;
+        if (c.getEdificioTrabajoId()     === id) afectados++;
+    });
+
+    return afectados;
+}
     demoler(id) {
         const edificio = this.#ciudad.getEdificios().find(e => e.getId() === id);
         if (!edificio) return { ok: false, mensaje: `Edificio "${id}" no encontrado` };

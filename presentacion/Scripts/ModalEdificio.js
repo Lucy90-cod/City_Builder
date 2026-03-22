@@ -127,7 +127,26 @@ export class ModalEdificio {
 
     // ── Demoler ──────────────────────────────────────────────
 
+    #manejarClickDemoler() {
+    if (!this.#edificioActual) return;
+
+    // Si ya estamos en modo confirmación → demoler directamente
+    if (this.#btnDemoler.textContent.includes('Sí, demoler')) {
+        this.#demoler();
+        return;
+    }
+
+    // 1. Calcular afectados
+    const id = this.#edificioActual.getId();
+    const afectados = this.#ctrlEdificio.calcularAfectados(id);
+
+    // 2. Abrir modal de confirmación
+    this.abrirConfirmacion(this.#edificioActual, afectados);
+    }
+    
+    
     #demoler() {
+        
         if (!this.#edificioActual) return;
 
         const id        = this.#edificioActual.getId();
@@ -141,6 +160,7 @@ export class ModalEdificio {
         } else {
             this.#notificaciones.mostrarError(resultado.mensaje);
         }
+    
     }
 
     // ── Helpers de UI ────────────────────────────────────────
@@ -197,3 +217,7 @@ export class ModalEdificio {
         </div>`;
     }
 }
+
+
+
+
