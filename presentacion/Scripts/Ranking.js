@@ -33,7 +33,7 @@ function renderizarTabla(top10, ciudadActualId) {
     if (top10.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="tabla-vacia">
+                <td colspan="8" class="tabla-vacia">
                     No hay ciudades en el ranking todavia
                 </td>
             </tr>
@@ -93,6 +93,11 @@ function registrarEventos(ctrlRanking) {
     // Volver al juego
     document.getElementById('btn-volver')?.addEventListener('click', () => {
         window.location.href = 'juego.html';
+    });
+
+    // Exportar ranking como JSON
+    document.getElementById('btn-exportar-json')?.addEventListener('click', () => {
+        ctrlRanking.exportar();
     });
 
     // Limpiar ranking

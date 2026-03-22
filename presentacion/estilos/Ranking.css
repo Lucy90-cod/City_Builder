@@ -26,6 +26,12 @@
     text-align: center;
 }
 
+.ranking-header-acciones {
+    display:     flex;
+    align-items: center;
+    gap:         8px;
+}
+
 .btn-sm { width: auto; padding: 6px 14px; font-size: 0.8rem; }
 
 /* Contenedor */
