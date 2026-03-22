@@ -10,13 +10,13 @@ import { ClimaService } from '../../negocio/Servicios/ClimaService.js';
 // Configurar API key una sola vez al importar
 ClimaService.setApiKey('c6b1a6cf379dda5f9ff2cc7fbbc65acc');
 
-const TIEMPO_ACTUALIZACION = 30 * 60 * 1000;
+const TIEMPO_ACTUALIZACION = 30 * 60 * 1000; //tiempo, milisegundos
 
 // ── Funciones de render ──────────────────────────────────────
 
 function renderCargando(contenedor, region) {
     contenedor.innerHTML = `
-dond        <div class="tarjeta-clima">
+            <div class="tarjeta-clima">
             <p><strong>Región:</strong> ${region}</p>
             <p>Cargando clima...</p>
         </div>
