@@ -78,28 +78,31 @@ export class Ciudadano {
      * @param {number} contexto.beneficioParque   - puntos por parque (default 5)
      */
     calcularFelicidad(contexto = {}) {
-        let puntos = 0;
+        let cambio = 0;
 
         // Factores positivos
-        if (this.#hasHouse) puntos += 20;
-        if (this.#hasJob)   puntos += 15;
+        if (this.#hasHouse) cambio += 20;
+        if (this.#hasJob)   cambio += 15;
 
         const beneficioServicio = contexto.beneficioServicio ?? 10;
         const beneficioParque   = contexto.beneficioParque   ?? 5;
         const servicios         = contexto.serviciosCercanos ?? 0;
         const parques           = contexto.parquesCercanos   ?? 0;
 
-        puntos += servicios * beneficioServicio;
-        puntos += parques   * beneficioParque;
+        cambio += servicios * beneficioServicio;
+        cambio += parques   * beneficioParque;
 
         // Factores negativos
-        if (!this.#hasHouse) puntos -= 20;
-        if (!this.#hasJob)   puntos -= 15;
+        if (!this.#hasHouse) cambio -= 20;
+        if (!this.#hasJob)   cambio -= 15;
 
-        // Clamp entre 0 y 100
+        // 🔥 CLAVE: sumar al valor actual (no reemplazar)
+        this.#felicidad += cambio * 0.1; // suaviza el cambio
+
+        // Limitar entre 0 y 100
         this.#felicidad = Math.max(
             Ciudadano.#FELICIDAD_MIN,
-            Math.min(Ciudadano.#FELICIDAD_MAX, puntos)
+            Math.min(Ciudadano.#FELICIDAD_MAX, this.#felicidad)
         );
     }
 
