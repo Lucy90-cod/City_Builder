@@ -336,3 +336,7 @@
     font-size: 0.72rem;
     color:     var(--texto-secundario);
 }
+
+.dinero-verde { color: green; font-weight: bold; }
+.dinero-amarillo { color: orange; font-weight: bold; }
+.dinero-rojo { color: red; font-weight: bold; }

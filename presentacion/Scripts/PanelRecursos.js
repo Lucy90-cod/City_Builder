@@ -18,6 +18,7 @@ export class PanelRecursos {
 
         // ── Header ───────────────────────────────────────
         PanelRecursos.#setValor('val-dinero',      `$${recurso.getMoney().toLocaleString('es-CO')}`);
+        PanelRecursos.#colorearDinero('val-dinero', recurso.getMoney());
         PanelRecursos.#setValor('val-electricidad', recurso.getElectricity().toLocaleString());
         PanelRecursos.#setValor('val-agua',         recurso.getWater().toLocaleString());
         PanelRecursos.#setValor('val-poblacion',    estado.poblacion);
@@ -28,7 +29,7 @@ export class PanelRecursos {
         // Colorear si recursos bajos o negativos
         PanelRecursos.#colorearRecurso('recurso-elec',  recurso.getElectricity());
         PanelRecursos.#colorearRecurso('recurso-agua',  recurso.getWater());
-        PanelRecursos.#colorearRecurso('recurso-dinero', recurso.getMoney());
+        PanelRecursos.#colorearDinero('recurso-dinero', recurso.getMoney());
 
         // ── Sidebar derecha — detalle ─────────────────────
         const contenedor = document.getElementById('recursos-detalle');
@@ -103,5 +104,20 @@ export class PanelRecursos {
         if (valor < 0)  return 'negativo';
         if (valor < 20) return 'bajo';
         return '';
+    }
+
+    static #colorearDinero(id, dinero) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.classList.remove('dinero-verde', 'dinero-amarillo', 'dinero-rojo');
+
+    if (dinero > 10000) {
+        el.classList.add('dinero-verde');
+    } else if (dinero < 1000) {
+        el.classList.add('dinero-rojo');
+    } else if (dinero < 5000) {
+        el.classList.add('dinero-amarillo');
+    }
     }
 }
