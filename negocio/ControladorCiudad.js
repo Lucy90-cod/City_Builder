@@ -38,8 +38,8 @@ export class ControladorCiudad {
             alto:  Number(datosFormulario.alto  ?? 15),
         });
 
-        // Recursos iniciales con electricidad y agua para sobrevivir primeros turnos
-        this.#ciudad.setRecurso(new Recurso(50000, 100, 100, 0));
+        // Recursos iniciales según HU-001: electricidad y agua en 0
+        this.#ciudad.setRecurso(new Recurso(50000, 0, 0, 0));
         this.#ciudad.setPuntuacion(new Puntuacion());
 
         CiudadStorage.save(this.#ciudad);
@@ -58,7 +58,11 @@ export class ControladorCiudad {
             throw new Error('La region es obligatoria');
 
         if (datos.nombre.trim().length > 50)
-            throw new Error('El nombre no puede superar 50 caracteres');
+            throw new Error('El nombre de la ciudad no puede superar 50 caracteres');
+
+        const alcaldeVal = datos.nombreAlcalde ?? datos.alcalde;
+        if (alcaldeVal.trim().length > 50)
+            throw new Error('El nombre del alcalde no puede superar 50 caracteres');
 
         const ancho = Number(datos.ancho ?? 15);
         const alto  = Number(datos.alto  ?? 15);

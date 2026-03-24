@@ -101,8 +101,8 @@ export class Industrial extends Edificio {
     return consumo;
   }
 
-  calcularProduccion() {
-    return this.producir();
+  calcularProduccion(recursos = {}) {
+    return this.producir(recursos);
   }
 
   getInfo() {

@@ -111,27 +111,16 @@ export class ControladorCiudadano {
      * Llamado en cada turno por ControladorTurno (paso 4).
      */
     actualizarFelicidad() {
-        const edificios  = this.#ciudad.getEdificios();
-        const servicios  = edificios.filter(e => e.getTipo() === 'servicio' && e.isActivo());
-        const parques    = edificios.filter(e => e.getTipo() === 'parque'   && e.isActivo());
+        const edificios = this.#ciudad.getEdificios();
+
+        // HU-013: contar todos los servicios y parques activos en la ciudad (sin radio)
+        const totalServicios = edificios.filter(e => e.getTipo() === 'servicio' && e.isActivo()).length;
+        const totalParques   = edificios.filter(e => e.getTipo() === 'parque'   && e.isActivo()).length;
 
         this.#ciudad.getCiudadanos().forEach(ciudadano => {
-            const pos = ciudadano.getEdificioResidencialId()
-                ? this.#ciudad.getEdificioPorId(ciudadano.getEdificioResidencialId())?.getPosicion()
-                : null;
-
-            // Contar servicios y parques en radio
-            const serviciosCercanos = pos
-                ? servicios.filter(s => this.#enRadio(pos, s.getPosicion(), s.getRadio())).length
-                : 0;
-
-            const parquesCercanos = pos
-                ? parques.filter(p => this.#enRadio(pos, p.getPosicion(), 5)).length
-                : 0;
-
             ciudadano.calcularFelicidad({
-                serviciosCercanos,
-                parquesCercanos,
+                serviciosCercanos: totalServicios,
+                parquesCercanos:   totalParques,
                 beneficioServicio: 10,
                 beneficioParque:   5,
             });
@@ -177,10 +166,4 @@ export class ControladorCiudadano {
                     && e.getEmpleosDisponibles() > 0);
     }
 
-    /** Verifica si posA esta dentro del radio de posB */
-    #enRadio(posA, posB, radio) {
-        const dx = posA.x - posB.x;
-        const dy = posA.y - posB.y;
-        return Math.sqrt(dx*dx + dy*dy) <= radio;
-    }
 }

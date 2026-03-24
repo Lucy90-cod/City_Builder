@@ -22,11 +22,17 @@ export class ControladorRecurso {
         const recurso   = this.#ciudad.getRecurso();
         const edificios = this.#ciudad.getEdificios();
 
+        // Pasar balance actual para que industriales reduzcan al 50% si faltan insumos
+        const recursosActuales = {
+            electricidadDisponible: recurso.getElectricity(),
+            aguaDisponible:         recurso.getWater(),
+        };
+
         const totalProduccion = { money: 0, electricity: 0, water: 0, food: 0 };
 
         edificios.forEach(e => {
             if (!e.isActivo()) return;
-            const prod = e.calcularProduccion();
+            const prod = e.calcularProduccion(recursosActuales);
             totalProduccion.money       += prod.money       ?? 0;
             totalProduccion.electricity += prod.electricity ?? 0;
             totalProduccion.water       += prod.water       ?? 0;
