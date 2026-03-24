@@ -71,42 +71,62 @@ export class PanelRecursos {
                 <span class="recurso-detalle-valor">${estado.edificios}</span>
             </div>
 
-            <!-- 🔥 DESGLOSE DE SCORE -->
+            <!-- DESGLOSE DE SCORE -->
             ${desglose ? `
                 <hr>
-
-                <div class="recurso-detalle-item">
-                    <span>👥 Población</span>
-                    <span>${desglose.poblacion} (+${desglose.poblacion * 10})</span>
+                <div class="recurso-detalle-item" style="font-weight:700;color:var(--texto-acento)">
+                    <span>🏆 Puntuación</span>
+                    <span>${desglose.total?.toLocaleString() ?? 0}</span>
                 </div>
 
                 <div class="recurso-detalle-item">
-                    <span>😊 Felicidad</span>
-                    <span>${desglose.felicidadAvg} (+${desglose.felicidadAvg * 5})</span>
+                    <span>👥 Población (×10)</span>
+                    <span>+${desglose.puntosPoblacion}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>😊 Felicidad (×5)</span>
+                    <span>+${desglose.puntosFelicidad}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>🏗️ Edificios (×50)</span>
+                    <span>+${desglose.puntosEdificios}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>💰 Dinero (/100)</span>
+                    <span>${desglose.puntosDinero >= 0 ? '+' : ''}${desglose.puntosDinero}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>⚡ Electricidad (×2)</span>
+                    <span>${desglose.puntosElectricidad >= 0 ? '+' : ''}${desglose.puntosElectricidad}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>💧 Agua (×2)</span>
+                    <span>${desglose.puntosAgua >= 0 ? '+' : ''}${desglose.puntosAgua}</span>
                 </div>
 
-                <div class="recurso-detalle-item">
-                    <span>🏗️ Edificios</span>
-                    <span>${desglose.numEdificios} (+${desglose.numEdificios * 50})</span>
-                </div>
-
-                <div class="recurso-detalle-item">
-                    <span>💰 Dinero</span>
-                    <span>${desglose.dinero} (+${Math.floor(desglose.dinero / 100)})</span>
-                </div>
-            ` : ''}
-                    ${desglose?.penalizaciones?.length ? `
-                <hr>
-                <div class="recurso-detalle-item">
-                    <strong>⚠️ Penalizaciones</strong>
-                </div>
-
-                ${desglose.penalizaciones.map(p => `
-                    <div class="recurso-detalle-item">
-                        <span>${p.nombre}</span>
-                        <span class="negativo">${p.valor}</span>
+                ${desglose.bonificaciones.length ? `
+                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#4caf50">
+                        <span>✨ Bonificaciones</span>
                     </div>
-                `).join('')}
+                    ${desglose.bonificaciones.map(b => `
+                        <div class="recurso-detalle-item">
+                            <span>${b.nombre}</span>
+                            <span style="color:#4caf50">+${b.valor}</span>
+                        </div>
+                    `).join('')}
+                ` : ''}
+
+                ${desglose.penalizaciones.length ? `
+                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#ef9a9a">
+                        <span>⚠️ Penalizaciones</span>
+                    </div>
+                    ${desglose.penalizaciones.map(p => `
+                        <div class="recurso-detalle-item">
+                            <span>${p.nombre}</span>
+                            <span class="negativo">${p.valor}</span>
+                        </div>
+                    `).join('')}
+                ` : ''}
             ` : ''}
         
         

@@ -104,10 +104,11 @@ export class Puntuacion {
         const ciudadanos = ciudad.getCiudadanos();
         const edificios  = ciudad.getEdificios();
 
-        const poblacion = ciudadanos.length;
-        const dinero = recurso?.getMoney() ?? 0;
+        const poblacion    = ciudadanos.length;
+        const numEdificios = edificios.length;
+        const dinero       = recurso?.getMoney()       ?? 0;
         const electricidad = recurso?.getElectricity() ?? 0;
-        const agua = recurso?.getWater() ?? 0;
+        const agua         = recurso?.getWater()       ?? 0;
 
         const felicidadAvg = poblacion > 0
             ? ciudadanos.reduce((sum, c) => sum + c.getFelicidad(), 0) / poblacion
@@ -115,43 +116,45 @@ export class Puntuacion {
 
         const desempleados = ciudadanos.filter(c => !c.tieneEmpleo()).length;
 
-        // 🔴 Penalizaciones
-        let penalizaciones = [];
+        // ── Contribuciones base ───────────────────────────────
+        const puntosPoblacion    = poblacion    * 10;
+        const puntosFelicidad    = Math.round(felicidadAvg * 5);
+        const puntosEdificios    = numEdificios * 50;
+        const puntosDinero       = Math.floor(dinero / 100);
+        const puntosElectricidad = electricidad * 2;
+        const puntosAgua         = agua         * 2;
 
-        if (dinero < 0) {
-            penalizaciones.push({ nombre: 'Dinero negativo', valor: -500 });
-        }
+        // ── Bonificaciones ────────────────────────────────────
+        const bonificaciones = [];
+        if (desempleados === 0 && poblacion > 0) bonificaciones.push({ nombre: 'Todos empleados',      valor: 500  });
+        if (felicidadAvg > 80)                   bonificaciones.push({ nombre: 'Felicidad > 80',       valor: 300  });
+        if (electricidad > 0 && agua > 0)        bonificaciones.push({ nombre: 'Recursos positivos',   valor: 200  });
+        if (poblacion > 1000)                    bonificaciones.push({ nombre: 'Ciudad > 1000 hab.',   valor: 1000 });
 
-        if (electricidad < 0) {
-            penalizaciones.push({ nombre: 'Electricidad negativa', valor: -300 });
-        }
-
-        if (agua < 0) {
-            penalizaciones.push({ nombre: 'Agua negativa', valor: -300 });
-        }
-
-        if (felicidadAvg < 40) {
-            penalizaciones.push({ nombre: 'Baja felicidad', valor: -400 });
-        }
-
-        if (desempleados > 0) {
-            penalizaciones.push({
-                nombre: 'Desempleo',
-                valor: -(desempleados * 10)
-            });
-        }
+        // ── Penalizaciones ────────────────────────────────────
+        const penalizaciones = [];
+        if (dinero       < 0)  penalizaciones.push({ nombre: 'Dinero negativo',        valor: -500 });
+        if (electricidad < 0)  penalizaciones.push({ nombre: 'Electricidad negativa',  valor: -300 });
+        if (agua         < 0)  penalizaciones.push({ nombre: 'Agua negativa',          valor: -300 });
+        if (felicidadAvg < 40) penalizaciones.push({ nombre: 'Baja felicidad',         valor: -400 });
+        if (desempleados > 0)  penalizaciones.push({ nombre: `Desempleo (${desempleados})`, valor: -(desempleados * 10) });
 
         return {
             poblacion,
-            felicidadAvg: Math.round(felicidadAvg),
+            felicidadAvg:     Math.round(felicidadAvg),
             dinero,
             electricidad,
             agua,
-            numEdificios: edificios.length,
-            scoreActual: this.#scoreActual,
-
-            // 🔥 nuevo
-            penalizaciones
+            numEdificios,
+            puntosPoblacion,
+            puntosFelicidad,
+            puntosEdificios,
+            puntosDinero,
+            puntosElectricidad,
+            puntosAgua,
+            bonificaciones,
+            penalizaciones,
+            total: this.#scoreActual,
         };
     }
 
