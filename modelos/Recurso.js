@@ -1,8 +1,7 @@
 /**
  * Recurso.js
  * Agrupa los 4 recursos de la ciudad.
- * GAME OVER si electricidad o agua llegan por debajo de -10.
- * Esto da margen al jugador para construir plantas antes del primer turno.
+ * GAME OVER si electricidad o agua son negativas (< 0).
  * Dinero inicial: $50,000
  */
 
@@ -47,19 +46,22 @@ export class Recurso {
         this.#food        -= consumo.food         ?? 0;
     }
 
+    // ── Setters directos (configuración en tiempo real) ──────────
+    setElectricity(val) { this.#electricity = Number(val) || 0; }
+    setWater(val)       { this.#water       = Number(val) || 0; }
+    setFood(val)        { this.#food        = Number(val) || 0; }
+
     /**
-     * GAME OVER si electricidad o agua bajan de -10.
-     * El umbral de -10 da margen para construir plantas
-     * antes de que termine el primer turno.
+     * GAME OVER si electricidad o agua son negativas (< 0).
      */
     isGameOver() {
-        return this.#electricity < -10 || this.#water < -10;
+        return this.#electricity < 0 || this.#water < 0;
     }
 
     /** Retorna 'electricidad' | 'agua' | 'ambos' si hay game over, o null si no. */
     getCausaGameOver() {
-        const sinElec = this.#electricity < -10;
-        const sinAgua = this.#water < -10;
+        const sinElec = this.#electricity < 0;
+        const sinAgua = this.#water < 0;
         if (sinElec && sinAgua) return 'ambos';
         if (sinElec) return 'electricidad';
         if (sinAgua) return 'agua';

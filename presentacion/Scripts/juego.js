@@ -112,16 +112,19 @@ function onTurnoCompletado(ciudadActualizada) {
     ctrlRanking.registrarCiudad(ciudad);
     mostrarIndicadorGuardando();
 
-    // ── Alertas de recurso en 0 (antes del game over que ocurre en -10) ──
+    // ── Alertas de recursos bajos ────────────────────────────────
     const recurso = ciudad.getRecurso();
-    if (recurso.getElectricity() <= 0 && recurso.getElectricity() > -10) {
-        Notificaciones.mostrarAlerta('¡Alerta! Te has quedado sin electricidad ⚡ — construye una planta');
+    if (recurso.getElectricity() <= 20 && recurso.getElectricity() >= 0) {
+        Notificaciones.mostrarAlerta('¡Alerta! Electricidad baja ⚡ — construye una planta antes de que se agote');
     }
-    if (recurso.getWater() <= 0 && recurso.getWater() > -10) {
-        Notificaciones.mostrarAlerta('¡Alerta! Te has quedado sin agua 💧 — construye una planta de agua');
+    if (recurso.getWater() <= 20 && recurso.getWater() >= 0) {
+        Notificaciones.mostrarAlerta('¡Alerta! Agua baja 💧 — construye una planta de agua antes de que se agote');
     }
     if (recurso.getFood() <= 0) {
-        Notificaciones.mostrarAlerta('¡Alerta! Te has quedado sin alimentos 🌽 — construye una granja');
+        Notificaciones.mostrarAlerta('¡Alerta! Sin alimentos 🌽 — construye una granja');
+    }
+    if (recurso.getMoney() < 0) {
+        Notificaciones.mostrarAlerta('¡Alerta! Dinero negativo 💸 — tus ingresos no cubren el mantenimiento');
     }
 }
 
@@ -299,5 +302,25 @@ function registrarEventos() {
     // ── FAB: navegar al panel de construcción en móvil ───────────
     document.getElementById('fab-construccion')?.addEventListener('click', () => {
         document.querySelector('.sidebar-izquierda')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ── Ajuste de recursos en tiempo real ────────────────────────
+    const inpElec = document.getElementById('input-electricidad');
+    const inpAgua = document.getElementById('input-agua');
+    const inpAlim = document.getElementById('input-alimentos');
+
+    // Inicializar inputs con valores actuales de la ciudad
+    if (inpElec) inpElec.value = ciudad.getRecurso().getElectricity();
+    if (inpAgua) inpAgua.value = ciudad.getRecurso().getWater();
+    if (inpAlim) inpAlim.value = ciudad.getRecurso().getFood();
+
+    document.getElementById('btn-aplicar-recursos')?.addEventListener('click', () => {
+        const recurso = ciudad.getRecurso();
+        recurso.setElectricity(Number(inpElec?.value) || 0);
+        recurso.setWater(Number(inpAgua?.value) || 0);
+        recurso.setFood(Number(inpAlim?.value) || 0);
+        PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
+        ctrlCiudad.guardar();
+        Notificaciones.mostrarExito('Recursos ajustados');
     });
 }
