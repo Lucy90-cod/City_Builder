@@ -144,6 +144,11 @@ function onGameOver(ciudadFinal, causa) {
 function manejarClickCelda(x, y, celda) {
     const modo = menuConstr?.getModoActual() ?? 'normal';
 
+    if (modo === 'ruta') {
+        menuConstr.manejarClickCelda(x, y);
+        return;
+    }
+
     if (modo === 'via') {
         menuConstr.manejarClickCelda(x, y);
         PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
