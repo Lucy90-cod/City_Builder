@@ -7,9 +7,9 @@
 export class PantallaGameOver {
 
     static #MENSAJES = {
-        electricidad: 'Tu ciudad volvió a la edad de las cavernas.\nLos ciudadanos están muy decepcionados... y en la oscuridad.',
-        agua:         'Nadie quiere vivir en un desierto.\nNi tus ciudadanos.',
-        ambos:        'Lograste lo imposible: una ciudad sin luz Y sin agua.\nFelicitaciones, alcalde.',
+        electricidad: '¡D\'oh! Se fue la luz... para siempre.\nHomer dejó el horno prendido y colapsó toda la red eléctrica.',
+        agua:         '¡D\'oh! Springfield se quedó sin agua.\nNi para hacer donuts. Marge está furiosa.',
+        ambos:        '¡D\'oh! ¡D\'oh! ¡DOBLE D\'OH!\nSin luz ni agua. El Señor Burns te manda sus condolencias.',
     };
 
     static #CAUSAS_TEXTO = {
@@ -62,7 +62,8 @@ export class PantallaGameOver {
 
         return `
         <div class="gameover-panel">
-            <div class="gameover-skull">💀</div>
+            <img class="gameover-homer" src="../../assets/personajes/simpsons_familia.png" alt="Los Simpson">
+            <div class="gameover-doh">¡D'oh!</div>
             <h1 class="gameover-titulo">GAME OVER</h1>
             <p class="gameover-mensaje">${mensaje.replace('\n', '<br>')}</p>
 
@@ -102,7 +103,7 @@ export class PantallaGameOver {
                 </button>
             </div>
 
-            <p class="gameover-footer">💀 Guardado en el ranking automáticamente</p>
+            <p class="gameover-footer">🍩 Guardado en el ranking automáticamente</p>
         </div>`;
     }
 }

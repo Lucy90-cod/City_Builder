@@ -31,12 +31,12 @@ const IMAGENES_EDIFICIO = {
     },
 };
 
+// Solo los archivos que existen en assets/personajes/
 const PERSONAJES = [
     '/assets/personajes/bart.png',
-    '/assets/personajes/lisa.png',
     '/assets/personajes/marge.png',
-    '/assets/personajes/maggie.png',
     '/assets/personajes/homer_normal.png',
+    '/assets/personajes/homer_feliz.png',
 ];
 
 export class MapaRenderer {
@@ -168,8 +168,9 @@ export class MapaRenderer {
         el.dataset.tipo = '';
         el.dataset.tooltip = '';
 
-        // Quitar personaje anterior
-        el.querySelector('.personaje-simpsons')?.remove();
+        // Quitar personajes y badge anteriores
+        el.querySelectorAll('.personaje-simpsons').forEach(p => p.remove());
+        el.querySelector('.ocupantes-badge')?.remove();
 
         const tipo = celda.getTipo();
         el.classList.add(tipo);
@@ -186,7 +187,7 @@ export class MapaRenderer {
                 el.dataset.tipo = info.tipo;
                 el.dataset.tooltip = info.descripcion;
                 if (info.tipo === 'residencial' && info.ocupantes > 0) {
-                    this.#agregarPersonaje(el);
+                    this.#agregarPersonajes(el, edificio.getId(), info.ocupantes, info.capacidad);
                 }
             }
         } else if (tipo === 'grass') {
@@ -196,12 +197,38 @@ export class MapaRenderer {
         }
     }
 
-    #agregarPersonaje(celdaEl) {
-        const div = document.createElement('div');
-        div.classList.add('personaje-simpsons');
-        const rand = PERSONAJES[Math.floor(Math.random() * PERSONAJES.length)];
-        div.style.backgroundImage = `url('${rand}')`;
-        celdaEl.appendChild(div);
+    /**
+     * Muestra hasta 3 personajes por celda residencial.
+     * El personaje asignado a cada edificio es fijo (determinístico por ID)
+     * para que no cambie aleatoriamente cada turno.
+     * @param {HTMLElement} celdaEl
+     * @param {string}      edificioId
+     * @param {number}      ocupantes
+     * @param {number}      capacidad
+     */
+    #agregarPersonajes(celdaEl, edificioId, ocupantes, capacidad) {
+        // Eliminar todos los personajes anteriores (evita apilamiento)
+        celdaEl.querySelectorAll('.personaje-simpsons').forEach(el => el.remove());
+        celdaEl.querySelector('.ocupantes-badge')?.remove();
+
+        // Elegir personaje base de forma determinística usando el ID del edificio
+        const seed = edificioId.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+        const cantidad = Math.min(ocupantes, 3);
+
+        for (let i = 0; i < cantidad; i++) {
+            const div = document.createElement('div');
+            div.classList.add('personaje-simpsons');
+            div.dataset.slot = i;
+            const img = PERSONAJES[(seed + i) % PERSONAJES.length];
+            div.style.backgroundImage = `url('${img}')`;
+            celdaEl.appendChild(div);
+        }
+
+        // Badge con conteo ocupantes/capacidad
+        const badge = document.createElement('div');
+        badge.classList.add('ocupantes-badge');
+        badge.textContent = `${ocupantes}/${capacidad}`;
+        celdaEl.appendChild(badge);
     }
 
     #getEl(x, y) {

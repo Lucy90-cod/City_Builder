@@ -237,11 +237,29 @@ body.pagina-juego {
     transform: scale(1) rotate(0deg);
 }
 
-.gameover-skull {
-    font-size:  3.8rem;
-    display:    block;
-    animation:  skull-float 2.5s ease-in-out infinite;
-    margin-bottom: 4px;
+.gameover-homer {
+    width:         220px;
+    height:        auto;
+    display:       block;
+    margin:        0 auto 4px;
+    filter:        drop-shadow(0 0 12px rgba(255, 200, 0, 0.7));
+    animation:     homer-swing 2.5s ease-in-out infinite;
+}
+
+@keyframes homer-swing {
+    0%, 100% { transform: rotate(-6deg) scale(1); }
+    50%       { transform: rotate(6deg) scale(1.05); }
+}
+
+.gameover-doh {
+    font-size:      2.4rem;
+    font-weight:    900;
+    color:          #ffd600;
+    text-shadow:    0 0 16px rgba(255, 214, 0, 0.9),
+                    2px 2px 0 #e65100;
+    letter-spacing: 2px;
+    margin-bottom:  4px;
+    font-family:    Impact, Arial Black, sans-serif;
 }
 
 .gameover-titulo {
