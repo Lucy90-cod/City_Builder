@@ -57,9 +57,17 @@
 }
 
 .btn-continuar {
-    padding:     7px 16px;
+    display:     inline-flex;
+    align-items: center;
+    justify-content: center;
+    width:       auto;
+    padding:     8px 18px;
     font-size:   0.85rem;
+    font-weight: 600;
     white-space: nowrap;
+    margin-top:  0;
+    height:      36px;
+    box-sizing:  border-box;
 }
 
 /* Header */
