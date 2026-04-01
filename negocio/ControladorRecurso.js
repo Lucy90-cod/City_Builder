@@ -15,6 +15,8 @@ export class ControladorRecurso {
     // Totales del ultimo turno (para mostrar en la vista)
     #ultimaProduccion = { money: 0, electricity: 0, water: 0, food: 0 };
     #ultimoConsumo    = { electricidad: 0, agua: 0, food: 0 };
+    /** Suma de mantenimiento descontado en el ultimo paso 3 del turno */
+    #ultimoMantenimientoDinero = 0;
 
     // Consumo de alimentos por ciudadano por turno (configurable en el futuro)
     static #FOOD_POR_CIUDADANO = 3;
@@ -105,6 +107,15 @@ export class ControladorRecurso {
 
     /** @returns {{ electricidad, agua, food }} */
     getUltimoConsumo()    { return { ...this.#ultimoConsumo }; }
+
+    /** @param {number} totalMantenimiento - total descontado en aplicarMantenimiento del mismo turno */
+    setUltimoMantenimientoDinero(totalMantenimiento) {
+        this.#ultimoMantenimientoDinero = Math.max(0, Number(totalMantenimiento) || 0);
+    }
+
+    getUltimoMantenimientoDinero() {
+        return this.#ultimoMantenimientoDinero;
+    }
 
     getBalanceElectricidad() { return this.#ciudad.getRecurso().getElectricity(); }
     getBalanceAgua()         { return this.#ciudad.getRecurso().getWater(); }

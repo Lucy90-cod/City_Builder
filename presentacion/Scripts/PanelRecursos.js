@@ -22,6 +22,8 @@ export class PanelRecursos {
         const estado = ciudad.getEstado();
         const prod   = ctrlRecurso?.getUltimaProduccion() ?? {};
         const cons   = ctrlRecurso?.getUltimoConsumo()    ?? {};
+        const gastoManten = ctrlRecurso?.getUltimoMantenimientoDinero() ?? 0;
+        const ingresoMoney = prod.money ?? 0;
 
         // ── Header ───────────────────────────────────────────
         PanelRecursos.#setValor('val-dinero',      `$${recurso.getMoney().toLocaleString('es-CO')}`);
@@ -40,8 +42,9 @@ export class PanelRecursos {
             prod.electricity ?? 0, cons.electricidad ?? 0, recurso.getElectricity());
         PanelRecursos.#setTitleTooltip('val-agua',
             prod.water ?? 0, cons.agua ?? 0, recurso.getWater());
-        PanelRecursos.#setTitleTooltipDinero('val-dinero',
-            prod.money ?? 0, cons.electricidad ?? 0, recurso.getMoney());
+        PanelRecursos.#setTitleTooltip('val-alimentos',
+            prod.food ?? 0, cons.food ?? 0, recurso.getFood());
+        PanelRecursos.#setTitleTooltipDinero('val-dinero', ingresoMoney, gastoManten, recurso.getMoney());
 
         // Colorear chips del header
         PanelRecursos.#colorearRecurso('recurso-elec',      recurso.getElectricity());
@@ -49,125 +52,32 @@ export class PanelRecursos {
         PanelRecursos.#colorearRecurso('recurso-alimentos', recurso.getFood());
         PanelRecursos.#colorearDinero('recurso-dinero',     recurso.getMoney());
 
+        const tituloDineroChip = PanelRecursos.#textoTooltipDinero(ingresoMoney, gastoManten, recurso.getMoney());
+        PanelRecursos.#setTitleOnEl('recurso-dinero', tituloDineroChip);
+        PanelRecursos.#setTitleOnEl('recurso-elec', PanelRecursos.#textoTooltipRecurso(
+            prod.electricity ?? 0, cons.electricidad ?? 0, recurso.getElectricity()));
+        PanelRecursos.#setTitleOnEl('recurso-agua', PanelRecursos.#textoTooltipRecurso(
+            prod.water ?? 0, cons.agua ?? 0, recurso.getWater()));
+        PanelRecursos.#setTitleOnEl('recurso-alimentos', PanelRecursos.#textoTooltipRecurso(
+            prod.food ?? 0, cons.food ?? 0, recurso.getFood()));
+
         // ── Sidebar derecha — detalle ─────────────────────────
-        const contenedor = document.getElementById('recursos-detalle');
-        const desglose   = ciudad.getPuntuacion()?.getDesglose(ciudad);
+        const contenedor      = document.getElementById('recursos-detalle');
+        const contenedorMovil = document.getElementById('recursos-detalle-movil');
+        const desglose        = ciudad.getPuntuacion()?.getDesglose(ciudad);
+
+        const htmlDetalle = PanelRecursos.#htmlRecursosDetalle(
+            prod, cons, recurso, estado, desglose, gastoManten);
 
         if (contenedor) {
-            const prodElec  = prod.electricity  ?? 0;
-            const consElec  = cons.electricidad ?? 0;
-            const prodAgua  = prod.water        ?? 0;
-            const consAgua  = cons.agua         ?? 0;
-            const prodFood  = prod.food         ?? 0;
-            const consFood  = cons.food         ?? 0;
-            const balElec   = recurso.getElectricity();
-            const balAgua   = recurso.getWater();
-            const food      = recurso.getFood();
-
-            contenedor.innerHTML = `
-            <div class="recurso-detalle-item"
-                 title="Ingreso: $${prodElec}\nMantenimiento: $${consElec}\nBalance acumulado: $${recurso.getMoney().toLocaleString('es-CO')}">
-                <span class="recurso-detalle-nombre">💰 Dinero</span>
-                <span class="recurso-detalle-valor ${recurso.getMoney() < 0 ? 'negativo' : ''}">
-                    $${recurso.getMoney().toLocaleString('es-CO')}
-                </span>
-            </div>
-
-            <div class="recurso-detalle-item"
-                 title="Producción: ${prodElec}\nConsumo: ${consElec}\nBalance acumulado: ${balElec}">
-                <span class="recurso-detalle-nombre">⚡ Electricidad</span>
-                <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(balElec)}">
-                    ${prodElec} <span class="prod-cons-sep">/</span> ${consElec}
-                    <span class="prod-cons-label">prod/cons</span>
-                </span>
-            </div>
-
-            <div class="recurso-detalle-item"
-                 title="Producción: ${prodAgua}\nConsumo: ${consAgua}\nBalance acumulado: ${balAgua}">
-                <span class="recurso-detalle-nombre">💧 Agua</span>
-                <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(balAgua)}">
-                    ${prodAgua} <span class="prod-cons-sep">/</span> ${consAgua}
-                    <span class="prod-cons-label">prod/cons</span>
-                </span>
-            </div>
-
-            <div class="recurso-detalle-item"
-                 title="Producción: ${prodFood}\nConsumo ciudadanos: ${consFood}\nStock: ${food}">
-                <span class="recurso-detalle-nombre">🌽 Alimentos</span>
-                <span class="recurso-detalle-valor ${food <= 0 ? 'negativo' : ''}">
-                    ${prodFood} <span class="prod-cons-sep">/</span> ${consFood}
-                    <span class="prod-cons-label">prod/cons</span>
-                </span>
-            </div>
-
-            <div class="recurso-detalle-item">
-                <span class="recurso-detalle-nombre">👥 Población</span>
-                <span class="recurso-detalle-valor">${estado.poblacion}</span>
-            </div>
-
-            <div class="recurso-detalle-item">
-                <span class="recurso-detalle-nombre">🏗️ Edificios</span>
-                <span class="recurso-detalle-valor">${estado.edificios}</span>
-            </div>
-
-            <!-- DESGLOSE DE SCORE -->
-            ${desglose ? `
-                <hr>
-                <div class="recurso-detalle-item" style="font-weight:700;color:var(--texto-acento)">
-                    <span>🏆 Puntuación</span>
-                    <span>${desglose.total?.toLocaleString() ?? 0}</span>
-                </div>
-
-                <div class="recurso-detalle-item">
-                    <span>👥 Población (×10)</span>
-                    <span>+${desglose.puntosPoblacion}</span>
-                </div>
-                <div class="recurso-detalle-item">
-                    <span>😊 Felicidad (×5)</span>
-                    <span>+${desglose.puntosFelicidad}</span>
-                </div>
-                <div class="recurso-detalle-item">
-                    <span>🏗️ Edificios (×50)</span>
-                    <span>+${desglose.puntosEdificios}</span>
-                </div>
-                <div class="recurso-detalle-item">
-                    <span>💰 Dinero (/100)</span>
-                    <span>${desglose.puntosDinero >= 0 ? '+' : ''}${desglose.puntosDinero}</span>
-                </div>
-                <div class="recurso-detalle-item">
-                    <span>⚡ Electricidad (×2)</span>
-                    <span>${desglose.puntosElectricidad >= 0 ? '+' : ''}${desglose.puntosElectricidad}</span>
-                </div>
-                <div class="recurso-detalle-item">
-                    <span>💧 Agua (×2)</span>
-                    <span>${desglose.puntosAgua >= 0 ? '+' : ''}${desglose.puntosAgua}</span>
-                </div>
-
-                ${desglose.bonificaciones?.length ? `
-                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#4caf50">
-                        <span>✨ Bonificaciones</span>
-                    </div>
-                    ${desglose.bonificaciones.map(b => `
-                        <div class="recurso-detalle-item">
-                            <span>${b.nombre}</span>
-                            <span style="color:#4caf50">+${b.valor}</span>
-                        </div>
-                    `).join('')}
-                ` : ''}
-
-                ${desglose.penalizaciones?.length ? `
-                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#ef9a9a">
-                        <span>⚠️ Penalizaciones</span>
-                    </div>
-                    ${desglose.penalizaciones.map(p => `
-                        <div class="recurso-detalle-item">
-                            <span>${p.nombre}</span>
-                            <span class="negativo">${p.valor}</span>
-                        </div>
-                    `).join('')}
-                ` : ''}
-            ` : ''}
-            `;
+            contenedor.innerHTML = htmlDetalle;
+            contenedor.querySelector('[data-tip-dinero]')
+                ?.setAttribute('title', tituloDineroChip);
+        }
+        if (contenedorMovil) {
+            contenedorMovil.innerHTML = htmlDetalle;
+            contenedorMovil.querySelector('[data-tip-dinero]')
+                ?.setAttribute('title', tituloDineroChip);
         }
 
         // ── Panel ciudadanos (sidebar izquierda) ──────────────
@@ -241,12 +151,148 @@ export class PanelRecursos {
             `Balance neto: ${balance >= 0 ? '+' : ''}${balance}`;
     }
 
-    static #setTitleTooltipDinero(id, ingreso, mantenimiento, balance) {
+    static #textoTooltipRecurso(produccion, consumo, balance) {
+        return (
+            `Producción: ${produccion}\n` +
+            `Consumo: ${consumo}\n` +
+            `Balance neto: ${balance >= 0 ? '+' : ''}${balance}`
+        );
+    }
+
+    static #textoTooltipDinero(ingreso, mantenimiento, saldoAcumulado) {
+        const neto = ingreso - mantenimiento;
+        return (
+            `Producción (ingresos turno): $${ingreso.toLocaleString('es-CO')}\n` +
+            `Consumo (mantenimiento): $${mantenimiento.toLocaleString('es-CO')}\n` +
+            `Balance neto (turno): ${neto >= 0 ? '+' : ''}$${neto.toLocaleString('es-CO')}\n` +
+            `Saldo acumulado: $${saldoAcumulado.toLocaleString('es-CO')}`
+        );
+    }
+
+    static #setTitleOnEl(elementId, title) {
+        const el = document.getElementById(elementId);
+        if (el) el.title = title;
+    }
+
+    static #setTitleTooltipDinero(id, ingreso, mantenimiento, saldoAcumulado) {
         const el = document.getElementById(id);
         if (!el) return;
-        el.title =
-            `Ingreso: $${ingreso.toLocaleString('es-CO')}\n` +
-            `Mantenimiento: $${mantenimiento.toLocaleString('es-CO')}\n` +
-            `Balance: $${balance.toLocaleString('es-CO')}`;
+        el.title = PanelRecursos.#textoTooltipDinero(ingreso, mantenimiento, saldoAcumulado);
+    }
+
+    static #htmlRecursosDetalle(prod, cons, recurso, estado, desglose, gastoManten) {
+        const prodElec  = prod.electricity  ?? 0;
+        const consElec  = cons.electricidad ?? 0;
+        const prodAgua  = prod.water        ?? 0;
+        const consAgua  = cons.agua         ?? 0;
+        const prodFood  = prod.food         ?? 0;
+        const consFood  = cons.food         ?? 0;
+        const balElec   = recurso.getElectricity();
+        const balAgua   = recurso.getWater();
+        const food      = recurso.getFood();
+        const saldo     = recurso.getMoney();
+
+        return `
+            <div class="recurso-detalle-item" data-tip-dinero>
+                <span class="recurso-detalle-nombre">💰 Dinero</span>
+                <span class="recurso-detalle-valor ${saldo < 0 ? 'negativo' : ''}">
+                    $${saldo.toLocaleString('es-CO')}
+                </span>
+            </div>
+
+            <div class="recurso-detalle-item"
+                 title="Producción: ${prodElec}\nConsumo: ${consElec}\nBalance acumulado: ${balElec}">
+                <span class="recurso-detalle-nombre">⚡ Electricidad</span>
+                <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(balElec)}">
+                    ${prodElec} <span class="prod-cons-sep">/</span> ${consElec}
+                    <span class="prod-cons-label">prod/cons</span>
+                </span>
+            </div>
+
+            <div class="recurso-detalle-item"
+                 title="Producción: ${prodAgua}\nConsumo: ${consAgua}\nBalance acumulado: ${balAgua}">
+                <span class="recurso-detalle-nombre">💧 Agua</span>
+                <span class="recurso-detalle-valor ${PanelRecursos.#claseRecurso(balAgua)}">
+                    ${prodAgua} <span class="prod-cons-sep">/</span> ${consAgua}
+                    <span class="prod-cons-label">prod/cons</span>
+                </span>
+            </div>
+
+            <div class="recurso-detalle-item"
+                 title="Producción: ${prodFood}\nConsumo ciudadanos: ${consFood}\nStock: ${food}">
+                <span class="recurso-detalle-nombre">🌽 Alimentos</span>
+                <span class="recurso-detalle-valor ${food <= 0 ? 'negativo' : ''}">
+                    ${prodFood} <span class="prod-cons-sep">/</span> ${consFood}
+                    <span class="prod-cons-label">prod/cons</span>
+                </span>
+            </div>
+
+            <div class="recurso-detalle-item">
+                <span class="recurso-detalle-nombre">👥 Población</span>
+                <span class="recurso-detalle-valor">${estado.poblacion}</span>
+            </div>
+
+            <div class="recurso-detalle-item">
+                <span class="recurso-detalle-nombre">🏗️ Edificios</span>
+                <span class="recurso-detalle-valor">${estado.edificios}</span>
+            </div>
+
+            ${desglose ? `
+                <hr>
+                <div class="recurso-detalle-item" style="font-weight:700;color:var(--texto-acento)">
+                    <span>🏆 Puntuación</span>
+                    <span>${desglose.total?.toLocaleString() ?? 0}</span>
+                </div>
+
+                <div class="recurso-detalle-item">
+                    <span>👥 Población (×10)</span>
+                    <span>+${desglose.puntosPoblacion}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>😊 Felicidad (×5)</span>
+                    <span>+${desglose.puntosFelicidad}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>🏗️ Edificios (×50)</span>
+                    <span>+${desglose.puntosEdificios}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>💰 Dinero (/100)</span>
+                    <span>${desglose.puntosDinero >= 0 ? '+' : ''}${desglose.puntosDinero}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>⚡ Electricidad (×2)</span>
+                    <span>${desglose.puntosElectricidad >= 0 ? '+' : ''}${desglose.puntosElectricidad}</span>
+                </div>
+                <div class="recurso-detalle-item">
+                    <span>💧 Agua (×2)</span>
+                    <span>${desglose.puntosAgua >= 0 ? '+' : ''}${desglose.puntosAgua}</span>
+                </div>
+
+                ${desglose.bonificaciones?.length ? `
+                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#4caf50">
+                        <span>✨ Bonificaciones</span>
+                    </div>
+                    ${desglose.bonificaciones.map(b => `
+                        <div class="recurso-detalle-item">
+                            <span>${b.nombre}</span>
+                            <span style="color:#4caf50">+${b.valor}</span>
+                        </div>
+                    `).join('')}
+                ` : ''}
+
+                ${desglose.penalizaciones?.length ? `
+                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#ef9a9a">
+                        <span>⚠️ Penalizaciones</span>
+                    </div>
+                    ${desglose.penalizaciones.map(p => `
+                        <div class="recurso-detalle-item">
+                            <span>${p.nombre}</span>
+                            <span class="negativo">${p.valor}</span>
+                        </div>
+                    `).join('')}
+                ` : ''}
+            ` : ''}
+        `;
     }
 }

@@ -108,7 +108,8 @@ export class ControladorTurno {
         }
 
         // Paso 3 — Mantenimiento → verificar game over por dinero negativo
-        this.#ctrlEdificio.aplicarMantenimiento();
+        const mantDinero = this.#ctrlEdificio.aplicarMantenimiento();
+        this.#ctrlRecurso.setUltimoMantenimientoDinero(mantDinero);
         const causaPost = this.#ciudad.getRecurso().getCausaGameOver();
         if (causaPost) {
             this.#terminarJuego(causaPost);

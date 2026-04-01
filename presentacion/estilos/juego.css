@@ -75,6 +75,11 @@ body.pagina-juego {
     border-left: 1px solid var(--borde);
 }
 
+/* Solo visible en móvil (ver Responsive.css); fuera del flujo en desktop */
+.panel-movil-extras {
+    display: none;
+}
+
 .zona-mapa {
     background:     var(--bg-app);
     padding:        12px;

@@ -29,27 +29,36 @@ export class WidgetNoticias {
     }
 
     async #actualizar() {
-        const contenedor = document.getElementById('widget-noticias');
-        if (!contenedor) return;
+        const contenedor      = document.getElementById('widget-noticias');
+        const contenedorMovil = document.getElementById('widget-noticias-movil');
+        if (!contenedor && !contenedorMovil) return;
 
         try {
             const noticias = await NoticiasService.getNoticias(this.#countryCode);
 
             if (!noticias.length) {
-                contenedor.innerHTML = `<p class="widget-placeholder">Sin noticias disponibles</p>`;
+                const vacio = `<p class="widget-placeholder">Sin noticias disponibles</p>`;
+                if (contenedor) contenedor.innerHTML = vacio;
+                if (contenedorMovil) contenedorMovil.innerHTML = vacio;
                 return;
             }
 
-            contenedor.innerHTML = noticias.map(n => `
+            const items = noticias.map(n => `
                  <div class="noticia-item">
-                    <a href="${n.url}" target="_blank" class="noticia-titulo">${n.titulo}</a>
+                    <a href="${n.url}" target="_blank" rel="noopener noreferrer" class="noticia-titulo">${n.titulo}</a>
                     <p class="noticia-descripcion">${n.descripcion}</p>
                     <span class="noticia-fuente">${n.fuente}</span>
                 </div>
             `).join('');
 
+            if (contenedor) contenedor.innerHTML = items;
+            if (contenedorMovil)
+                contenedorMovil.innerHTML = `<div class="noticias-carrusel-inner">${items}</div>`;
+
         } catch (e) {
-            contenedor.innerHTML = `<p class="widget-placeholder">Noticias no disponibles</p>`;
+            const err = `<p class="widget-placeholder">Noticias no disponibles</p>`;
+            if (contenedor) contenedor.innerHTML = err;
+            if (contenedorMovil) contenedorMovil.innerHTML = err;
         }
     }
 }

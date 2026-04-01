@@ -25,9 +25,9 @@
 /* ── Tablet 768px – 1024px ──────────────────────────────────── */
 @media (max-width: 1024px) {
 
-    /* Dos columnas + fila inferior para clima/noticias */
+    /* Dos columnas (~30% sidebar / ~70% mapa) + fila inferior para clima/noticias */
     .layout-juego {
-        grid-template-columns: 220px 1fr;
+        grid-template-columns: minmax(200px, 30%) minmax(0, 70%);
         grid-template-rows:    1fr auto;
     }
 
@@ -69,10 +69,80 @@
 
     /* Formulario inicio */
     .formulario-contenedor { padding: 24px; }
+
+    /* Bloque solo móvil: oculto en tablet/desktop */
+    .panel-movil-extras { display: none; }
 }
 
 /* ── Móvil < 768px ──────────────────────────────────────────── */
 @media (max-width: 767px) {
+
+    /* Panel recursos + noticias entre mapa y barra de construcción */
+    .panel-movil-extras {
+        display:        flex;
+        flex-direction: column;
+        gap:            12px;
+        order:          2;
+        padding:        10px 12px;
+        background:     var(--bg-panel);
+        border-top:     1px solid var(--borde);
+        border-bottom:  1px solid var(--borde);
+    }
+
+    .detalle-movil-recursos {
+        background:    var(--bg-card);
+        border:        1px solid var(--borde);
+        border-radius: var(--radio);
+        padding:       0 12px 10px;
+    }
+
+    .detalle-movil-summary {
+        cursor:      pointer;
+        font-weight: 700;
+        padding:     12px 0;
+        list-style:  none;
+        color:       var(--texto-acento);
+    }
+
+    .detalle-movil-summary::-webkit-details-marker { display: none; }
+
+    .recursos-detalle-movil-inner {
+        max-height: 55vh;
+        overflow-y: auto;
+    }
+
+    .widget-noticias-movil-bloque {
+        margin:     0;
+        padding:    0;
+        background: transparent;
+    }
+
+    .titulo-noticias-movil {
+        margin-bottom: 8px;
+        font-size:     0.95rem;
+    }
+
+    .noticias-carrusel-inner {
+        display:                    flex;
+        gap:                        12px;
+        overflow-x:                 auto;
+        scroll-snap-type:           x mandatory;
+        padding-bottom:             6px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .noticias-carrusel-inner .noticia-item {
+        flex:           0 0 88%;
+        max-width:      360px;
+        scroll-snap-align: start;
+        border:         1px solid var(--borde);
+        border-radius:  var(--radio);
+        padding:        10px;
+        margin:         0;
+        background:     var(--bg-card);
+    }
+
+    .noticias-carrusel-inner .noticia-item:last-child { border-bottom: 1px solid var(--borde); }
 
     /* Una sola columna: sidebar arriba, mapa abajo */
     body.pagina-juego {
@@ -179,12 +249,12 @@
     .gameover-titulo { font-size: 1.6rem; }
     .gameover-skull  { font-size: 3rem; }
 
-    /* ── Reordenar: mapa arriba, sidebar construcción abajo ── */
-    .zona-mapa       { order: 1; }
+    /* ── Reordenar: mapa → extras móvil → sidebar construcción ── */
+    .zona-mapa { order: 1; }
     .sidebar-izquierda {
-        order:        2;
+        order:         3;
         border-bottom: none;
-        border-top:   1px solid var(--borde);
+        border-top:    1px solid var(--borde);
     }
 
     /* ── Notificaciones en la parte superior ─────────────── */
@@ -241,10 +311,10 @@
     .btn-go           { width: 100%; }
 }
 
-/* ── Tablet landscape: recuperar 3 columnas ─────────────────── */
+/* ── Tablet landscape: 3 columnas (≈15% / 70% / 15%) ────────── */
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
     .layout-juego {
-        grid-template-columns: 200px 1fr 200px;
+        grid-template-columns: minmax(160px, 15fr) minmax(0, 70fr) minmax(160px, 15fr);
         grid-template-rows:    1fr;
     }
 
