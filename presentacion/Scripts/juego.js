@@ -77,9 +77,12 @@ async function inicializar() {
         ciudad,
         onTurnoCompletado,
         onGameOver,
-        10
+        300
     );
     ctrlTurno.iniciar();
+
+    // ── Autosave cada 30 segundos ────────────────────────────────
+    setInterval(() => ctrlCiudad.guardar(), 30_000);
 
     const coords = ciudad.getCoordenadas();
     renderWidgetClima(ciudad.getRegion(), coords.lat, coords.lon);
@@ -123,8 +126,8 @@ function onTurnoCompletado(ciudadActualizada) {
     if (recurso.getFood() <= 0) {
         Notificaciones.mostrarAlerta('¡Alerta! Sin alimentos 🌽 — construye una granja');
     }
-    if (recurso.getMoney() < 0) {
-        Notificaciones.mostrarAlerta('¡Alerta! Dinero negativo 💸 — tus ingresos no cubren el mantenimiento');
+    if (recurso.getMoney() < 5000 && recurso.getMoney() >= 0) {
+        Notificaciones.mostrarAlerta('¡Alerta! Dinero bajo 💸 — quedan menos de $5,000');
     }
 }
 

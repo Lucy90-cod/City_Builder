@@ -41,7 +41,7 @@ export class ControladorTurno {
      * @param {Function} onGameOver        - callback(ciudad) llamado cuando game over
      * @param {number}   duracionSegundos  - duracion del turno en segundos (default 30)
      */
-    constructor(ciudad, onTurnoCompletado, onGameOver, duracionSegundos = 10) {
+    constructor(ciudad, onTurnoCompletado, onGameOver, duracionSegundos = 300) {
         this.#ciudad           = ciudad;
         this.#duracionTurno    = duracionSegundos;
         this.#intervalo        = null;
@@ -107,8 +107,13 @@ export class ControladorTurno {
             return;
         }
 
-        // Paso 3 — Mantenimiento
+        // Paso 3 — Mantenimiento → verificar game over por dinero negativo
         this.#ctrlEdificio.aplicarMantenimiento();
+        const causaPost = this.#ciudad.getRecurso().getCausaGameOver();
+        if (causaPost) {
+            this.#terminarJuego(causaPost);
+            return;
+        }
 
         // Paso 4 — Felicidad + crecimiento
         this.#ctrlCiudadano.actualizarFelicidad();

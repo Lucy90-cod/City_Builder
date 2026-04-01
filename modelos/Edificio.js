@@ -33,7 +33,8 @@ export class Edificio {
     getCosto()                { return this.#costo; }
     getPosicion()             { return { ...this.#posicion }; }
     isActivo()                { return this.#activo; }
-    getCostoMantenimiento()   { return this.#costoMantenimiento; }
+    /** 0.01% del costo de construccion por turno */
+    getCostoMantenimiento()   { return Math.round(this.#costo * 0.0001); }
 
     // ── Setter ───────────────────────────────────────────────────────────────
 

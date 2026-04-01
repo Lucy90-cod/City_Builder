@@ -52,19 +52,20 @@ export class Recurso {
     setFood(val)        { this.#food        = Number(val) || 0; }
 
     /**
-     * GAME OVER si electricidad o agua son negativas (< 0).
+     * GAME OVER si cualquier recurso es negativo (< 0).
      */
     isGameOver() {
-        return this.#electricity < 0 || this.#water < 0;
+        return this.#electricity < 0 || this.#water < 0
+            || this.#money < 0       || this.#food < 0;
     }
 
-    /** Retorna 'electricidad' | 'agua' | 'ambos' si hay game over, o null si no. */
+    /** Retorna la causa del game over o null si no hay. */
     getCausaGameOver() {
-        const sinElec = this.#electricity < 0;
-        const sinAgua = this.#water < 0;
-        if (sinElec && sinAgua) return 'ambos';
-        if (sinElec) return 'electricidad';
-        if (sinAgua) return 'agua';
+        if (this.#electricity < 0 && this.#water < 0) return 'electricidad y agua';
+        if (this.#electricity < 0) return 'electricidad';
+        if (this.#water       < 0) return 'agua';
+        if (this.#money       < 0) return 'dinero';
+        if (this.#food        < 0) return 'alimentos';
         return null;
     }
 
