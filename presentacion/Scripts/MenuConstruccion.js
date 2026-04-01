@@ -145,6 +145,7 @@ export class MenuConstruccion {
 
     async #calcularRuta() {
         const loader = this.#mostrarLoader();
+        let exito = false;
 
         try {
             const resultado = await this.#ctrlRuta.calcularRuta(
@@ -155,12 +156,23 @@ export class MenuConstruccion {
             if (resultado.ok) {
                 this.#renderer.mostrarRuta(resultado.ruta);
                 this.#notificaciones.mostrarExito(resultado.mensaje);
+                exito = true;
             } else {
                 this.#notificaciones.mostrarError(resultado.mensaje);
             }
         } finally {
             loader.remove();
-            this.#cancelar();
+            if (exito) {
+                // Resetear modo sin borrar la ruta visual
+                this.#modoActual = 'normal';
+                this.#modoRuta = null;
+                this.#origenSeleccionado = null;
+                this.#destinoSeleccionado = null;
+                this.#btnCancelar.style.display = 'none';
+                this.#renderer.setModoNormal();
+            } else {
+                this.#cancelar();
+            }
         }
     }
 
