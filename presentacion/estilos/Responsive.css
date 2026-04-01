@@ -222,8 +222,20 @@
         justify-content: center;
     }
 
+    /* ── Duración del turno visible en sidebar móvil ──────── */
+    .duracion-movil { display: block; }
+
     /* ── Controles de zoom ocultos en móvil ──────────────── */
     .controles-zoom { display: none; }
+
+    /* ── Scroll del mapa ─────────────────────────────────── */
+    .mapa-contenedor {
+        overflow:    auto;
+        height:      70vw;
+        min-height:  260px;
+        max-height:  80vw;
+        -webkit-overflow-scrolling: touch;
+    }
 
     /* ── Widget clima compacto ───────────────────────────── */
     .clima-extra  { display: none; }

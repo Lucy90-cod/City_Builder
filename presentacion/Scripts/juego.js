@@ -236,6 +236,14 @@ function registrarEventos() {
         window.location.href = 'Ranking.html';
     });
 
+    // Input de duración en móvil (sidebar) — sincronizado con el del header
+    document.getElementById('input-duracion-movil')?.addEventListener('change', (e) => {
+        const seg = Math.max(30, Number(e.target.value));
+        ctrlTurno?.setDuracion(seg);
+        const inputHeader = document.getElementById('input-duracion');
+        if (inputHeader) inputHeader.value = seg;
+    });
+
     document.getElementById('input-duracion')?.addEventListener('change', (e) => {
         const seg = parseInt(e.target.value);
         if (seg >= 5) {

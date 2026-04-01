@@ -349,6 +349,20 @@ body.pagina-juego {
     margin:    0;
 }
 
+/* ── Duración del turno en móvil ────────────────────────────── */
+.duracion-movil { display: none; }   /* oculto en desktop */
+
+.duracion-movil-fila {
+    display:     flex;
+    align-items: center;
+    gap:         8px;
+}
+
+.duracion-movil-fila .select-panel {
+    flex:      1;
+    margin: 0;
+}
+
 /* ── Controles de zoom (HU-024) ─────────────────────────────── */
 .controles-zoom {
     display:         flex;

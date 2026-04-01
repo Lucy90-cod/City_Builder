@@ -92,9 +92,16 @@
                 <button id="btn-demoler" class="btn-peligro btn-demoler">
                     🔨 Demoler
                 </button>
-                <button id="btn-cancelar" class="btn-peligro oculto">
-                    ✕ Cancelar
-                </button>
+                <button id="btn-cancelar" class="btn-peligro oculto">✕ Cancelar</button>
+
+                <!-- Duración del turno: visible solo en móvil (en desktop está en el header) -->
+                <div class="campo-grupo-panel duracion-movil">
+                    <label class="panel-label">⏱ Duración del turno</label>
+                    <div class="duracion-movil-fila">
+                        <input type="number" id="input-duracion-movil" class="select-panel" value="300" min="30" max="600">
+                        <span class="panel-label">seg</span>
+                    </div>
+                </div>
             </section>
 
             <section class="panel-construccion">
