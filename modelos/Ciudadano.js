@@ -84,10 +84,11 @@ export class Ciudadano {
         if (this.#hasHouse) cambio += 20;
         if (this.#hasJob)   cambio += 15;
 
-        const beneficioServicio = contexto.beneficioServicio ?? 10;
-        const beneficioParque   = contexto.beneficioParque   ?? 5;
-        const servicios         = contexto.serviciosCercanos ?? 0;
-        const parques           = contexto.parquesCercanos   ?? 0;
+        const beneficioServicio        = contexto.beneficioServicio        ?? 10;
+        const beneficioParque          = contexto.beneficioParque          ?? 5;
+        const penalizacionSinAlimentos = contexto.penalizacionSinAlimentos ?? 0;
+        const servicios                = contexto.serviciosCercanos        ?? 0;
+        const parques                  = contexto.parquesCercanos          ?? 0;
 
         cambio += servicios * beneficioServicio;
         cambio += parques   * beneficioParque;
@@ -95,6 +96,7 @@ export class Ciudadano {
         // Factores negativos
         if (!this.#hasHouse) cambio -= 20;
         if (!this.#hasJob)   cambio -= 15;
+        cambio -= penalizacionSinAlimentos;
 
         // 🔥 CLAVE: sumar al valor actual (no reemplazar)
         this.#felicidad += cambio * 0.1; // suaviza el cambio

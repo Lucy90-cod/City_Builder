@@ -163,7 +163,8 @@ export class ControladorCiudad {
         const url  = URL.createObjectURL(blob);
         const a    = document.createElement('a');
         a.href     = url;
-        a.download = `${this.#ciudad.getNombre()}_turno${this.#ciudad.getTurnoActual()}.json`;
+        const fecha = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+        a.download = `ciudad_${this.#ciudad.getNombre()}_${fecha}.json`;
         a.click();
         URL.revokeObjectURL(url);
     }

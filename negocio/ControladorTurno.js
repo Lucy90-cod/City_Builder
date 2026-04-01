@@ -41,7 +41,7 @@ export class ControladorTurno {
      * @param {Function} onGameOver        - callback(ciudad) llamado cuando game over
      * @param {number}   duracionSegundos  - duracion del turno en segundos (default 30)
      */
-    constructor(ciudad, onTurnoCompletado, onGameOver, duracionSegundos = 30) {
+    constructor(ciudad, onTurnoCompletado, onGameOver, duracionSegundos = 10) {
         this.#ciudad           = ciudad;
         this.#duracionTurno    = duracionSegundos;
         this.#intervalo        = null;
@@ -90,8 +90,9 @@ export class ControladorTurno {
         }
     }
 
-    isEnEjecucion() { return this.#enEjecucion; }
-    getDuracion()   { return this.#duracionTurno; }
+    isEnEjecucion()  { return this.#enEjecucion; }
+    getDuracion()    { return this.#duracionTurno; }
+    getCtrlRecurso() { return this.#ctrlRecurso; }
 
     // ── Los 6 pasos ──────────────────────────────────────────
 

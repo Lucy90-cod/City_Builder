@@ -144,32 +144,49 @@ export class MenuConstruccion {
     }
 
     async #calcularRuta() {
-        this.#notificaciones.mostrarInfo('🧭 Calculando ruta...');
+        const loader = this.#mostrarLoader();
 
-        const resultado = await this.#ctrlRuta.calcularRuta(
-            this.#origenSeleccionado,
-            this.#destinoSeleccionado
-        );
+        try {
+            const resultado = await this.#ctrlRuta.calcularRuta(
+                this.#origenSeleccionado,
+                this.#destinoSeleccionado
+            );
 
-        if (resultado.ok) {
-            this.#renderer.mostrarRuta(resultado.ruta);
-            this.#notificaciones.mostrarExito(resultado.mensaje);
-        } else {
-            this.#notificaciones.mostrarError(resultado.mensaje);
+            if (resultado.ok) {
+                this.#renderer.mostrarRuta(resultado.ruta);
+                this.#notificaciones.mostrarExito(resultado.mensaje);
+            } else {
+                this.#notificaciones.mostrarError(resultado.mensaje);
+            }
+        } finally {
+            loader.remove();
+            this.#cancelar();
         }
+    }
 
-        this.#cancelar();
+    #mostrarLoader() {
+        const overlay = document.createElement('div');
+        overlay.className = 'loader-ruta-overlay';
+        overlay.innerHTML = `
+            <div class="loader-ruta-caja">
+                <div class="loader-ruta-spinner"></div>
+                <span class="loader-ruta-texto">🧭 Calculando ruta...</span>
+            </div>`;
+        document.body.appendChild(overlay);
+        return overlay;
     }
 
     // ── Modos ────────────────────────────────────────────────
 
     #activarModoConstruccion() {
+        this.#renderer.limpiarRuta();
         this.#modoActual = 'construccion';
         this.#renderer.setModoConstruccion(true);
         this.#btnCancelar.style.display = 'block';
     }
 
     #activarModoVia() {
+        this.#renderer.limpiarRuta();
         this.#modoActual = 'via';
         this.#renderer.setModoVia(true);
         this.#btnCancelar.style.display = 'block';
@@ -194,6 +211,7 @@ export class MenuConstruccion {
         this.#infoCosto.textContent = '';
         this.#btnCancelar.style.display = 'none';
         this.#renderer.setModoNormal();
+        this.#renderer.limpiarRuta();
         this.#modoRuta = null;
         this.#origenSeleccionado = null;
         this.#destinoSeleccionado = null;

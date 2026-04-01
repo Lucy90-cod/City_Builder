@@ -20,6 +20,21 @@
             <p class="subtitulo-juego">Construye tu Ciudad</p>
         </header>
 
+        <!-- Banner continuar partida (visible solo si hay guardado) -->
+        <div id="banner-continuar" class="banner-continuar oculto">
+            <p class="banner-continuar-texto">
+                ¿Continuar con <strong id="banner-ciudad-nombre">—</strong>?
+            </p>
+            <div class="banner-continuar-btns">
+                <button id="btn-continuar-partida" type="button" class="btn-principal btn-continuar">
+                    ▶ Continuar partida
+                </button>
+                <button id="btn-eliminar-guardado" type="button" class="btn-peligro btn-sm">
+                    🗑 Borrar guardado
+                </button>
+            </div>
+        </div>
+
         <!-- Formulario -->
         <main class="formulario-contenedor">
             <form id="form-nueva-ciudad" class="form-ciudad" novalidate>

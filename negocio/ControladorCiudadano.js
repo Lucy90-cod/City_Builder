@@ -117,12 +117,15 @@ export class ControladorCiudadano {
         const totalServicios = edificios.filter(e => e.getTipo() === 'servicio' && e.isActivo()).length;
         const totalParques   = edificios.filter(e => e.getTipo() === 'parque'   && e.isActivo()).length;
 
+        const sinAlimentos = (this.#ciudad.getRecurso()?.getFood() ?? 1) <= 0;
+
         this.#ciudad.getCiudadanos().forEach(ciudadano => {
             ciudadano.calcularFelicidad({
-                serviciosCercanos: totalServicios,
-                parquesCercanos:   totalParques,
-                beneficioServicio: 10,
-                beneficioParque:   5,
+                serviciosCercanos:        totalServicios,
+                parquesCercanos:          totalParques,
+                beneficioServicio:        10,
+                beneficioParque:          5,
+                penalizacionSinAlimentos: sinAlimentos ? 15 : 0,
             });
         });
     }

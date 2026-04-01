@@ -9,7 +9,7 @@ export class Ranking {
     #entradas;      // Array de { ciudadId, nombre, alcalde, score, turno, fecha }
     #maxEntradas;
 
-    static #MAX_DEFAULT = 10;
+    static #MAX_DEFAULT = 20;   // guarda hasta 20; la vista muestra solo top 10
 
     constructor(maxEntradas = Ranking.#MAX_DEFAULT) {
         this.#entradas   = [];
@@ -72,19 +72,32 @@ export class Ranking {
 
     // ── Consultas ────────────────────────────────────────────
 
-    /** Retorna las top 10 entradas ordenadas por score */
+    /** Retorna las top 10 entradas ordenadas por score (para la tabla) */
     getTop10() {
+        return this.#entradas.slice(0, 10);
+    }
+
+    /** Retorna todas las entradas almacenadas (hasta maxEntradas=20) */
+    getTodasEntradas() {
         return [...this.#entradas];
     }
 
     /**
-     * Retorna la posicion (1-based) de una ciudad en el ranking.
+     * Retorna la posicion (1-based) de una ciudad en el ranking completo.
      * Retorna -1 si no esta en el ranking.
      * @param {string} ciudadId
      */
     getPosicion(ciudadId) {
         const idx = this.#entradas.findIndex(e => e.ciudadId === ciudadId);
         return idx === -1 ? -1 : idx + 1;
+    }
+
+    /**
+     * Retorna la entrada de una ciudad buscando en todo el ranking.
+     * @param {string} ciudadId
+     */
+    getEntrada(ciudadId) {
+        return this.#entradas.find(e => e.ciudadId === ciudadId) ?? null;
     }
 
     // ── Ordenar ──────────────────────────────────────────────

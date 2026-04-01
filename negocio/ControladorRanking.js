@@ -34,13 +34,10 @@ export class ControladorRanking {
         RankingStorage.save(this.#ranking);
     }
 
-    getTop10() {
-        return this.#ranking.getTop10();
-    }
-
-    getPosicion(ciudadId) {
-        return this.#ranking.getPosicion(ciudadId);
-    }
+    getTop10()              { return this.#ranking.getTop10(); }
+    getTodasEntradas()      { return this.#ranking.getTodasEntradas(); }
+    getPosicion(ciudadId)   { return this.#ranking.getPosicion(ciudadId); }
+    getEntrada(ciudadId)    { return this.#ranking.getEntrada(ciudadId); }
 
     limpiar() {
         this.#ranking.limpiar();

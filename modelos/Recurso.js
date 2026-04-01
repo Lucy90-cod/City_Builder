@@ -44,6 +44,7 @@ export class Recurso {
 
         this.#electricity -= consumo.electricidad ?? 0;
         this.#water       -= consumo.agua         ?? 0;
+        this.#food        -= consumo.food         ?? 0;
     }
 
     /**

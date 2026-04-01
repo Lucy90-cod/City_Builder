@@ -12,6 +12,7 @@ import { CiudadStorage }      from '../../acceso_datos/CiudadStorage.js';
 document.addEventListener('DOMContentLoaded', () => {
     const ctrlRanking = new ControladorRanking();
     const top10       = ctrlRanking.getTop10();
+    const todas       = ctrlRanking.getTodasEntradas();
 
     // Obtener ciudad actual para resaltarla
     const dataCiudad   = CiudadStorage.load();
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         : null;
 
     renderizarTabla(top10, ciudadActual);
-    mostrarMiCiudad(top10, ciudadActual, ctrlRanking);
+    mostrarMiCiudad(top10, todas, ciudadActual, ctrlRanking);
     registrarEventos(ctrlRanking);
 });
 
@@ -64,26 +65,39 @@ function renderizarTabla(top10, ciudadActualId) {
 
 // ── Card ciudad actual ───────────────────────────────────────
 
-function mostrarMiCiudad(top10, ciudadActualId, ctrlRanking) {
+function mostrarMiCiudad(top10, todas, ciudadActualId, ctrlRanking) {
     if (!ciudadActualId) return;
 
-    const card = document.getElementById('mi-ciudad-card');
-    if (!card) return;
-
-    const entrada  = top10.find(e => e.ciudadId === ciudadActualId);
     const posicion = ctrlRanking.getPosicion(ciudadActualId);
+    const entrada  = ctrlRanking.getEntrada(ciudadActualId);
 
     if (!entrada || posicion === -1) return;
 
-    const nombre   = document.getElementById('mi-ciudad-nombre');
-    const pos      = document.getElementById('mi-ciudad-posicion');
-    const score    = document.getElementById('mi-ciudad-score');
+    const estaEnTop10 = top10.some(e => e.ciudadId === ciudadActualId);
 
-    if (nombre) nombre.textContent = entrada.nombre;
-    if (pos)    pos.textContent    = `#${posicion}`;
-    if (score)  score.textContent  = `${entrada.score.toLocaleString('es-CO')} pts`;
+    if (estaEnTop10) {
+        // Mostrar card destacada encima de la tabla
+        const card   = document.getElementById('mi-ciudad-card');
+        const nombre = document.getElementById('mi-ciudad-nombre');
+        const pos    = document.getElementById('mi-ciudad-posicion');
+        const score  = document.getElementById('mi-ciudad-score');
 
-    card.classList.remove('oculto');
+        if (nombre) nombre.textContent = entrada.nombre;
+        if (pos)    pos.textContent    = `#${posicion}`;
+        if (score)  score.textContent  = `${entrada.score.toLocaleString('es-CO')} pts`;
+        card?.classList.remove('oculto');
+    } else {
+        // Mostrar banner "Tu ciudad: #XX" debajo de la tabla
+        const fuera   = document.getElementById('mi-ciudad-fuera');
+        const posFuera = document.getElementById('mi-ciudad-pos-fuera');
+        const nomFuera = document.getElementById('mi-ciudad-nombre-fuera');
+        const scFuera  = document.getElementById('mi-ciudad-score-fuera');
+
+        if (posFuera) posFuera.textContent = `#${posicion}`;
+        if (nomFuera) nomFuera.textContent = entrada.nombre;
+        if (scFuera)  scFuera.textContent  = entrada.score.toLocaleString('es-CO');
+        fuera?.classList.remove('oculto');
+    }
 }
 
 // ── Eventos ──────────────────────────────────────────────────

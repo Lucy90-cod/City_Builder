@@ -25,12 +25,33 @@
 /* ── Tablet 768px – 1024px ──────────────────────────────────── */
 @media (max-width: 1024px) {
 
-    /* Dos columnas: sidebar izquierda + mapa (sin sidebar derecha) */
+    /* Dos columnas + fila inferior para clima/noticias */
     .layout-juego {
         grid-template-columns: 220px 1fr;
+        grid-template-rows:    1fr auto;
     }
 
-    .sidebar-derecha { display: none; }
+    /* Sidebar derecha al fondo como banda horizontal */
+    .sidebar-derecha {
+        display:        flex;
+        flex-direction: row;
+        gap:            16px;
+        grid-column:    1 / -1;
+        grid-row:       2;
+        border-left:    none;
+        border-top:     1px solid var(--borde);
+        overflow-x:     auto;
+        overflow-y:     hidden;
+        max-height:     160px;
+        padding:        10px 16px;
+        align-items:    flex-start;
+        min-height:     0;
+    }
+
+    .sidebar-derecha .widget {
+        flex:      0 0 200px;
+        min-width: 200px;
+    }
 
     /* Celda más pequeña para que el mapa quepa mejor */
     :root { --celda-size: 40px; }
@@ -157,6 +178,56 @@
     }
     .gameover-titulo { font-size: 1.6rem; }
     .gameover-skull  { font-size: 3rem; }
+
+    /* ── Reordenar: mapa arriba, sidebar construcción abajo ── */
+    .zona-mapa       { order: 1; }
+    .sidebar-izquierda {
+        order:        2;
+        border-bottom: none;
+        border-top:   1px solid var(--borde);
+    }
+
+    /* ── Notificaciones en la parte superior ─────────────── */
+    .notificaciones-contenedor {
+        top:       70px;
+        bottom:    auto;
+        right:     8px;
+        left:      8px;
+        max-width: none;
+    }
+
+    /* ── Touch targets mínimos 44px ──────────────────────── */
+    .btn-header,
+    .btn-primary,
+    .btn-secundario,
+    .btn-peligro,
+    .select-panel { min-height: 44px; }
+
+    /* ── Pinch-zoom habilitado en el mapa ────────────────── */
+    .mapa-contenedor { touch-action: pan-x pan-y pinch-zoom; }
+
+    /* ── Modal casi pantalla completa ────────────────────── */
+    .modal-edificio {
+        width:      92vw !important;
+        max-height: 80vh;
+        overflow-y: auto;
+        top:        10vh !important;
+        transform:  translateX(-50%) !important;
+    }
+
+    /* ── FAB construcción visible ────────────────────────── */
+    .fab-construccion {
+        display:         flex;
+        align-items:     center;
+        justify-content: center;
+    }
+
+    /* ── Controles de zoom ocultos en móvil ──────────────── */
+    .controles-zoom { display: none; }
+
+    /* ── Widget clima compacto ───────────────────────────── */
+    .clima-extra  { display: none; }
+    .clima-ciudad { display: none; }
 }
 
 /* ── Muy pequeño < 400px ────────────────────────────────────── */
@@ -168,4 +239,32 @@
 
     .gameover-botones { flex-direction: column; }
     .btn-go           { width: 100%; }
+}
+
+/* ── Tablet landscape: recuperar 3 columnas ─────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .layout-juego {
+        grid-template-columns: 200px 1fr 200px;
+        grid-template-rows:    1fr;
+    }
+
+    .sidebar-derecha {
+        display:        flex;
+        flex-direction: column;
+        grid-column:    auto;
+        grid-row:       auto;
+        border-top:     none;
+        border-left:    1px solid var(--borde);
+        max-height:     none;
+        overflow-x:     hidden;
+        overflow-y:     auto;
+        align-items:    stretch;
+    }
+
+    .sidebar-derecha .widget { flex: 0 0 auto; min-width: auto; }
+}
+
+/* ── Tablet portrait: modal 60% ─────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .modal-edificio { width: min(580px, 60vw) !important; }
 }

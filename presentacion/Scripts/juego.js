@@ -70,14 +70,14 @@ async function inicializar() {
     modalEdificio = new ModalEdificio(ctrlEdificio, renderer, Notificaciones);
     modalEdificio.init();
 
-    PanelRecursos.actualizar(ciudad);
+    PanelRecursos.actualizar(ciudad, null);
     PanelRecursos.actualizarFelicidad(ctrlCiudadano.getFelicidadPromedio());
 
     ctrlTurno = new ControladorTurno(
         ciudad,
         onTurnoCompletado,
         onGameOver,
-        30
+        10
     );
     ctrlTurno.iniciar();
 
@@ -100,16 +100,29 @@ function actualizarEdificiosMap() {
 function onTurnoCompletado(ciudadActualizada) {
     ciudad = ciudadActualizada;
     actualizarEdificiosMap();
-    PanelRecursos.actualizar(ciudad);
+    PanelRecursos.actualizar(ciudad, ctrlTurno.getCtrlRecurso());
     PanelRecursos.actualizarFelicidad(ctrlCiudadano.getFelicidadPromedio());
 
-    const sinVivienda = document.getElementById('stat-sin-vivienda');
+    const sinVivienda  = document.getElementById('stat-sin-vivienda');
     const desempleados = document.getElementById('stat-desempleados');
-    if (sinVivienda) sinVivienda.textContent = ctrlCiudadano.getTotalSinVivienda();
+    if (sinVivienda)  sinVivienda.textContent  = ctrlCiudadano.getTotalSinVivienda();
     if (desempleados) desempleados.textContent = ctrlCiudadano.getTotalDesempleados();
 
     renderer.actualizarTodo();
     ctrlRanking.registrarCiudad(ciudad);
+    mostrarIndicadorGuardando();
+
+    // ── Alertas de recurso en 0 (antes del game over que ocurre en -10) ──
+    const recurso = ciudad.getRecurso();
+    if (recurso.getElectricity() <= 0 && recurso.getElectricity() > -10) {
+        Notificaciones.mostrarAlerta('¡Alerta! Te has quedado sin electricidad ⚡ — construye una planta');
+    }
+    if (recurso.getWater() <= 0 && recurso.getWater() > -10) {
+        Notificaciones.mostrarAlerta('¡Alerta! Te has quedado sin agua 💧 — construye una planta de agua');
+    }
+    if (recurso.getFood() <= 0) {
+        Notificaciones.mostrarAlerta('¡Alerta! Te has quedado sin alimentos 🌽 — construye una granja');
+    }
 }
 
 function onGameOver(ciudadFinal, causa) {
@@ -133,7 +146,7 @@ function manejarClickCelda(x, y, celda) {
 
     if (modo === 'via') {
         menuConstr.manejarClickCelda(x, y);
-        PanelRecursos.actualizar(ciudad);
+        PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
         return;
     }
 
@@ -141,7 +154,7 @@ function manejarClickCelda(x, y, celda) {
         menuConstr.manejarClickCelda(x, y);
         actualizarEdificiosMap();
         renderer.actualizarCelda(x, y);
-        PanelRecursos.actualizar(ciudad);
+        PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
         return;
     }
 
@@ -150,7 +163,7 @@ function manejarClickCelda(x, y, celda) {
             const res = ctrlMapa.eliminarVia(x, y);
             if (res.ok) {
                 renderer.actualizarCelda(x, y);
-                PanelRecursos.actualizar(ciudad);
+                PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
                 Notificaciones.mostrarExito(res.mensaje);
             } else {
                 Notificaciones.mostrarError(res.mensaje);
@@ -175,6 +188,13 @@ function manejarClickCelda(x, y, celda) {
     }
 }
 
+function mostrarIndicadorGuardando() {
+    const el = document.getElementById('indicador-guardando');
+    if (!el) return;
+    el.classList.remove('oculto');
+    setTimeout(() => el.classList.add('oculto'), 1500);
+}
+
 function registrarEventos() {
     const btnPausar = document.getElementById('btn-pausar');
     btnPausar?.addEventListener('click', () => {
@@ -196,6 +216,7 @@ function registrarEventos() {
 
     document.getElementById('btn-guardar')?.addEventListener('click', () => {
         ctrlCiudad.guardar();
+        mostrarIndicadorGuardando();
         Notificaciones.mostrarExito('Ciudad guardada correctamente');
     });
 
@@ -253,5 +274,25 @@ function registrarEventos() {
                 }
                 break;
         }
+    });
+
+    // ── Controles de zoom (+/−) ──────────────────────────────────
+    let celdaSize = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--celda-size')
+    ) || 48;
+
+    document.getElementById('btn-zoom-in')?.addEventListener('click', () => {
+        celdaSize = Math.min(celdaSize + 8, 80);
+        document.documentElement.style.setProperty('--celda-size', `${celdaSize}px`);
+    });
+
+    document.getElementById('btn-zoom-out')?.addEventListener('click', () => {
+        celdaSize = Math.max(celdaSize - 8, 24);
+        document.documentElement.style.setProperty('--celda-size', `${celdaSize}px`);
+    });
+
+    // ── FAB: navegar al panel de construcción en móvil ───────────
+    document.getElementById('fab-construccion')?.addEventListener('click', () => {
+        document.querySelector('.sidebar-izquierda')?.scrollIntoView({ behavior: 'smooth' });
     });
 }

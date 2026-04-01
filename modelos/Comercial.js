@@ -78,8 +78,10 @@ export class Comercial extends Edificio {
     return { electricidad: Comercial.#CONFIG[this.#subtipo].consumoElectricidad };
   }
 
-  calcularProduccion() {
+  calcularProduccion(recursos = {}) {
     if (!this.isActivo()) return {};
+    // Sin electricidad no genera ingresos (CLAUDE.md: "Sin electricidad → ingreso = $0")
+    if ((recursos.electricidadDisponible ?? 1) <= 0) return { money: 0 };
     return { money: this.#ingresosPorTurno };
   }
 

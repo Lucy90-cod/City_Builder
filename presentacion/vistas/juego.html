@@ -38,6 +38,14 @@
                 <span class="recurso-icono">👥</span>
                 <span class="recurso-valor" id="val-poblacion">0</span>
             </div>
+            <div class="recurso-header" id="recurso-alimentos">
+                <span class="recurso-icono">🌽</span>
+                <span class="recurso-valor" id="val-alimentos">0</span>
+            </div>
+            <div class="recurso-header" id="recurso-felicidad">
+                <span class="recurso-icono">😊</span>
+                <span class="recurso-valor" id="val-felicidad">50%</span>
+            </div>
         </div>
         <div class="header-der">
             <button id="btn-pausar" class="btn-header">⏸ Pausar</button>
@@ -46,7 +54,7 @@
             <button id="btn-ranking" class="btn-header">🏆 Ranking</button>
             <label class="duracion-label">
                 Turno cada
-                <input type="number" id="input-duracion" class="input-duracion" value="30" min="5" max="120"> seg
+                <input type="number" id="input-duracion" class="input-duracion" value="10" min="5" max="120"> seg
             </label>
         </div>
     </header>
@@ -116,6 +124,10 @@
 
         <!-- ZONA MAPA -->
         <main class="zona-mapa">
+            <div class="controles-zoom">
+                <button id="btn-zoom-in"  class="btn-zoom" title="Acercar (+)">+</button>
+                <button id="btn-zoom-out" class="btn-zoom" title="Alejar (−)">−</button>
+            </div>
             <div id="mapa-contenedor" class="mapa-contenedor">
                 <div id="mapa-grid" class="mapa-grid"></div>
             </div>
@@ -162,6 +174,12 @@
 
     <!-- NOTIFICACIONES -->
     <div id="notificaciones-contenedor" class="notificaciones-contenedor"></div>
+
+    <!-- INDICADOR GUARDANDO -->
+    <div id="indicador-guardando" class="indicador-guardando oculto">💾 Guardando...</div>
+
+    <!-- FAB construcción: visible solo en móvil via media query -->
+    <button id="fab-construccion" class="fab-construccion" title="Menú de construcción">🏗</button>
 
     <script type="module" src="../Scripts/juego.js"></script>
 </body>

@@ -138,3 +138,26 @@
     font-weight: 700;
     color:       var(--texto-acento);
 }
+
+/* Ciudad fuera del top 10 */
+.mi-ciudad-fuera {
+    margin-top:    20px;
+    padding:       12px 20px;
+    background:    var(--bg-panel);
+    border:        1px solid var(--borde);
+    border-radius: var(--radio);
+    font-size:     0.9rem;
+    color:         var(--texto-secundario);
+    text-align:    center;
+}
+
+.fuera-pos {
+    font-weight: 700;
+    color:       var(--texto-acento);
+    margin:      0 4px;
+}
+
+.fuera-sep {
+    color:  var(--borde);
+    margin: 0 6px;
+}

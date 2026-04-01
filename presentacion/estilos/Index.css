@@ -22,6 +22,36 @@
     gap: 24px;
 }
 
+/* ── Banner continuar partida ─────────────────────────────── */
+.banner-continuar {
+    background:    rgba(255, 214, 0, 0.12);
+    border:        2px solid var(--color-acento, #f9a825);
+    border-radius: var(--radio-lg, 12px);
+    padding:       16px 20px;
+    display:       flex;
+    align-items:   center;
+    justify-content: space-between;
+    gap:           16px;
+    flex-wrap:     wrap;
+}
+
+.banner-continuar-texto {
+    font-size:  0.95rem;
+    color:      var(--texto-primario);
+    margin:     0;
+}
+
+.banner-continuar-btns {
+    display: flex;
+    gap:     8px;
+    flex-shrink: 0;
+}
+
+.btn-continuar {
+    padding:   8px 20px;
+    font-size: 0.9rem;
+}
+
 /* Header */
 .inicio-header {
     text-align: center;

@@ -6,9 +6,10 @@
 
 import { ControladorCiudad } from '../../negocio/ControladorCiudad.js';
 import { ControladorJugador } from '../../negocio/ControladorJugador.js';
-import { ColombiaService } from '../../negocio/servicios/ColombiaService.js';
-import { ControladorMapa } from '../../negocio/ControladorMapa.js';
-import { ControladorEdificio } from '../../negocio/ControladorEdificio.js';  // ← FALTABA ESTE
+import { ColombiaService }    from '../../negocio/servicios/ColombiaService.js';
+import { ControladorMapa }    from '../../negocio/ControladorMapa.js';
+import { ControladorEdificio } from '../../negocio/ControladorEdificio.js';
+import { CiudadStorage }      from '../../acceso_datos/CiudadStorage.js';
 
 // ── Instancias de controladores ──────────────────────────────
 const ctrlCiudad = new ControladorCiudad();
@@ -63,7 +64,34 @@ let regionFinal = '';
 document.addEventListener('DOMContentLoaded', () => {
     cargarDepartamentos();
     registrarEventos();
+    verificarPartidaGuardada();
 });
+
+// ── Continuar partida guardada ───────────────────────────────
+
+function verificarPartidaGuardada() {
+    const data = CiudadStorage.load();
+    if (!data) return;
+
+    const banner = document.getElementById('banner-continuar');
+    if (!banner) return;
+
+    const nombreEl = document.getElementById('banner-ciudad-nombre');
+    if (nombreEl) nombreEl.textContent = data.nombre ?? 'tu ciudad';
+
+    banner.classList.remove('oculto');
+
+    document.getElementById('btn-continuar-partida')?.addEventListener('click', () => {
+        window.location.href = 'presentacion/vistas/juego.html';
+    });
+
+    document.getElementById('btn-eliminar-guardado')?.addEventListener('click', () => {
+        if (confirm('¿Seguro? Se perderá la partida guardada.')) {
+            CiudadStorage.delete();
+            banner.classList.add('oculto');
+        }
+    });
+}
 
 // ── Cargar departamentos ─────────────────────────────────────
 

@@ -337,6 +337,42 @@
     color:     var(--texto-secundario);
 }
 
-.dinero-verde { color: green; font-weight: bold; }
-.dinero-amarillo { color: orange; font-weight: bold; }
-.dinero-rojo { color: red; font-weight: bold; }
+.dinero-verde    { color: #4caf50; font-weight: bold; }
+.dinero-amarillo { color: #ff9800; font-weight: bold; }
+.dinero-rojo     { color: #f44336; font-weight: bold; }
+
+/* ── Formato prod/consumo en sidebar de recursos ─────────────── */
+.prod-cons-sep {
+    color:       var(--texto-secundario);
+    font-weight: 400;
+    margin:      0 2px;
+}
+
+/* ── Indicador Guardando ─────────────────────────────────────── */
+.indicador-guardando {
+    position:      fixed;
+    bottom:        24px;
+    left:          24px;
+    background:    var(--bg-panel);
+    border:        1px solid var(--borde);
+    border-radius: var(--radio);
+    padding:       8px 14px;
+    font-size:     0.8rem;
+    color:         var(--texto-secundario);
+    box-shadow:    var(--sombra-sm);
+    z-index:       300;
+    opacity:       1;
+    transition:    opacity 0.4s ease;
+}
+
+.indicador-guardando.oculto {
+    opacity:        0;
+    pointer-events: none;
+}
+
+.prod-cons-label {
+    font-size:   0.7rem;
+    font-weight: 400;
+    color:       var(--texto-secundario);
+    margin-left: 4px;
+}
