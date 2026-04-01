@@ -122,7 +122,7 @@ export class MenuConstruccion {
         this.#modoRuta = 'origen';
         this.#origenSeleccionado = null;
         this.#destinoSeleccionado = null;
-        this.#btnCancelar.style.display = 'block';
+        this.#btnCancelar.classList.remove('oculto');
         this.#notificaciones.mostrarInfo('Selecciona el edificio de ORIGEN');
     }
 
@@ -168,7 +168,7 @@ export class MenuConstruccion {
                 this.#modoRuta = null;
                 this.#origenSeleccionado = null;
                 this.#destinoSeleccionado = null;
-                this.#btnCancelar.style.display = 'none';
+                this.#btnCancelar.classList.add('oculto');
                 this.#renderer.setModoNormal();
             } else {
                 this.#cancelar();
@@ -194,14 +194,14 @@ export class MenuConstruccion {
         this.#renderer.limpiarRuta();
         this.#modoActual = 'construccion';
         this.#renderer.setModoConstruccion(true);
-        this.#btnCancelar.style.display = 'block';
+        this.#btnCancelar.classList.remove('oculto');
     }
 
     #activarModoVia() {
         this.#renderer.limpiarRuta();
         this.#modoActual = 'via';
         this.#renderer.setModoVia(true);
-        this.#btnCancelar.style.display = 'block';
+        this.#btnCancelar.classList.remove('oculto');
         this.#notificaciones.mostrarAlerta('Haz click en una celda para colocar una via ($100)');
     }
 
@@ -209,7 +209,7 @@ export class MenuConstruccion {
         this.#cancelar();
         this.#modoActual = 'demolicion';
         this.#renderer.setModoDemolicion(true);
-        this.#btnCancelar.style.display = 'block';
+        this.#btnCancelar.classList.remove('oculto');
         this.#notificaciones.mostrarAlerta('🔨 Haz click en un edificio o via para demoler');
     }
 
@@ -221,7 +221,7 @@ export class MenuConstruccion {
         this.#selectSubtipo.value = '';
         this.#panelSubtipo.classList.add('oculto');
         this.#infoCosto.textContent = '';
-        this.#btnCancelar.style.display = 'none';
+        this.#btnCancelar.classList.add('oculto');
         this.#renderer.setModoNormal();
         this.#renderer.limpiarRuta();
         this.#modoRuta = null;
@@ -302,7 +302,7 @@ export class MenuConstruccion {
         }
 
         this.#panelSubtipo.classList.remove('oculto');
-        this.#panelSubtipo.style.display = '';
+        this.#panelSubtipo.classList.remove('oculto');
         subtipos.forEach(sub => {
             const opt = document.createElement('option');
             opt.value = sub;
