@@ -82,6 +82,9 @@ export class PanelRecursos {
 
         // ── Panel ciudadanos (sidebar izquierda) ──────────────
         PanelRecursos.#setValor('stat-total-ciudadanos', estado.poblacion);
+        const numResidenciales = ciudad.getEdificios()
+            .filter(e => e.getTipo() === 'residencial').length;
+        PanelRecursos.#setValor('stat-edificios-residenciales', numResidenciales);
     }
 
     /**
