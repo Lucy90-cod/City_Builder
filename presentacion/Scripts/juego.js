@@ -69,6 +69,10 @@ async function inicializar() {
 
     modalEdificio = new ModalEdificio(ctrlEdificio, renderer, Notificaciones);
     modalEdificio.init();
+    modalEdificio.setControladorMapa(ctrlMapa);
+    modalEdificio.setPostDemoler(() => {
+        PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
+    });
 
     PanelRecursos.actualizar(ciudad, null);
     PanelRecursos.actualizarFelicidad(ctrlCiudadano.getFelicidadPromedio());
@@ -171,14 +175,7 @@ function manejarClickCelda(x, y, celda) {
 
     if (modo === 'demolicion') {
         if (celda.isVia()) {
-            const res = ctrlMapa.eliminarVia(x, y);
-            if (res.ok) {
-                renderer.actualizarCelda(x, y);
-                PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
-                Notificaciones.mostrarExito(res.mensaje);
-            } else {
-                Notificaciones.mostrarError(res.mensaje);
-            }
+            modalEdificio.abrirConfirmacionVia(x, y);
         } else if (celda.isEdificio()) {
             const edificio = ciudad.getEdificioPorId(celda.getEdificioId());
             if (edificio) {

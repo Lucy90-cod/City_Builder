@@ -8,8 +8,12 @@
 export class ModalEdificio {
 
     #ctrlEdificio;
+    #ctrlMapa;
     #renderer;
     #notificaciones;
+    #onPostDemoler;
+    /** Demolición de vía pendiente de confirmar: { x, y } */
+    #viaPendiente;
 
     // Elementos del DOM
     #modal;
@@ -29,6 +33,18 @@ export class ModalEdificio {
         this.#renderer       = renderer;
         this.#notificaciones = notificaciones;
         this.#edificioActual = null;
+        this.#ctrlMapa = null;
+        this.#onPostDemoler = null;
+        this.#viaPendiente = null;
+    }
+
+    setControladorMapa(ctrlMapa) {
+        this.#ctrlMapa = ctrlMapa;
+    }
+
+    /** Tras demoler edificio o vía con éxito (actualizar panel de recursos, etc.). */
+    setPostDemoler(fn) {
+        this.#onPostDemoler = typeof fn === 'function' ? fn : null;
     }
 
     // ── Inicializacion ───────────────────────────────────────
@@ -65,6 +81,7 @@ export class ModalEdificio {
      * @param {Edificio} edificio
      */
     abrir(edificio) {
+        this.#viaPendiente = null;
         this.#edificioActual = edificio;
 
         const info = edificio.getInfo();
@@ -92,6 +109,7 @@ export class ModalEdificio {
      * @param {number}   ciudadanosAfectados
      */
     abrirConfirmacion(edificio, ciudadanosAfectados = 0) {
+        this.#viaPendiente = null;
         this.#edificioActual = edificio;
 
         const info     = edificio.getInfo();
@@ -119,10 +137,40 @@ export class ModalEdificio {
         this.#modal.classList.add('visible');
     }
 
+    /**
+     * Confirmación antes de demoler una vía (modo demolición).
+     * @param {number} x
+     * @param {number} y
+     */
+    abrirConfirmacionVia(x, y) {
+        if (!this.#ctrlMapa) {
+            console.warn('ModalEdificio: falta ControladorMapa para demolición de vía');
+            return;
+        }
+
+        this.#viaPendiente   = { x, y };
+        this.#edificioActual = null;
+
+        const costo     = this.#ctrlMapa.getCostoPorCeldaVia();
+        const reembolso = Math.floor(costo * 0.5);
+
+        this.#imgEdificio.style.display = 'none';
+        this.#nombreEdificio.textContent = `¿Demoler vía en (${x}, ${y})?`;
+        this.#descripcionEdificio.textContent =
+            `Esta acción no se puede deshacer. Recibirás $${reembolso.toLocaleString('es-CO')} (50% de $${costo.toLocaleString('es-CO')}).`;
+        this.#statsEdificio.innerHTML = '';
+        this.#btnDemoler.textContent   = '✓ Sí, demoler';
+        this.#btnDemoler.style.display = '';
+
+        this.#overlay.classList.add('visible');
+        this.#modal.classList.add('visible');
+    }
+
     cerrar() {
         this.#modal.classList.remove('visible');
         this.#overlay.classList.remove('visible');
         this.#edificioActual = null;
+        this.#viaPendiente = null;
     }
 
     // ── Demoler ──────────────────────────────────────────────
@@ -146,7 +194,21 @@ export class ModalEdificio {
     
     
     #demoler() {
-        
+        if (this.#viaPendiente && this.#ctrlMapa) {
+            const { x, y } = this.#viaPendiente;
+            const resultado = this.#ctrlMapa.eliminarVia(x, y);
+            if (resultado.ok) {
+                this.#renderer.actualizarCelda(x, y);
+                this.#notificaciones.mostrarExito(resultado.mensaje);
+                this.#viaPendiente = null;
+                this.#onPostDemoler?.();
+                this.cerrar();
+            } else {
+                this.#notificaciones.mostrarError(resultado.mensaje);
+            }
+            return;
+        }
+
         if (!this.#edificioActual) return;
 
         const id        = this.#edificioActual.getId();
@@ -156,11 +218,11 @@ export class ModalEdificio {
         if (resultado.ok) {
             this.#renderer.actualizarCelda(pos.x, pos.y);
             this.#notificaciones.mostrarExito(resultado.mensaje);
+            this.#onPostDemoler?.();
             this.cerrar();
         } else {
             this.#notificaciones.mostrarError(resultado.mensaje);
         }
-    
     }
 
     // ── Helpers de UI ────────────────────────────────────────

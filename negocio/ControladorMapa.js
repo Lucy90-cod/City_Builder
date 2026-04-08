@@ -102,13 +102,15 @@ export class ControladorMapa {
     }
 
     /**
-     * Elimina una via de (x, y). No devuelve dinero.
+     * Elimina una via de (x, y). Reembolsa 50% del costo por celda ($100 → $50).
      * No se puede eliminar si hay un edificio adyacente que depende de esta via.
      * @returns {{ ok: boolean, mensaje: string }}
      */
     eliminarVia(x, y) {
         const mapa = this.#ciudad.getMapa();
         const celda = mapa.getCelda(x, y);
+        const vias  = this.#ciudad.getVias();
+        const costoCelda = vias.getCostoPorCelda();
 
         if (!celda.isVia())
             return { ok: false, mensaje: `No hay via en (${x},${y})` };
@@ -144,9 +146,20 @@ export class ControladorMapa {
 
         // Eliminar
         celda.setTipo('grass');
-        this.#ciudad.getVias().eliminarCelda(x, y);
+        vias.eliminarCelda(x, y);
 
-        return { ok: true, mensaje: `Via eliminada en (${x},${y})` };
+        const reembolso = Math.floor(costoCelda * 0.5);
+        this.#ciudad.getRecurso().addMoney(reembolso);
+
+        return {
+            ok: true,
+            mensaje: `Via eliminada en (${x},${y}). Reembolso: $${reembolso.toLocaleString('es-CO')}`,
+        };
+    }
+
+    /** Costo de construcción de una celda de vía (para textos del modal). */
+    getCostoPorCeldaVia() {
+        return this.#ciudad.getVias().getCostoPorCelda();
     }
 
     // ── Consultas ────────────────────────────────────────────
