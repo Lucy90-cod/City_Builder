@@ -12,7 +12,6 @@ import { CiudadStorage }      from '../../acceso_datos/CiudadStorage.js';
 document.addEventListener('DOMContentLoaded', () => {
     const ctrlRanking = new ControladorRanking();
     const top10       = ctrlRanking.getTop10();
-    const todas       = ctrlRanking.getTodasEntradas();
 
     // Obtener ciudad actual para resaltarla
     const dataCiudad   = CiudadStorage.load();
@@ -21,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         : null;
 
     renderizarTabla(top10, ciudadActual);
-    mostrarMiCiudad(top10, todas, ciudadActual, ctrlRanking);
+    mostrarMiCiudad(top10, ciudadActual, ctrlRanking);
     registrarEventos(ctrlRanking);
 });
 
@@ -56,7 +55,7 @@ function renderizarTabla(top10, ciudadActualId) {
                 <td class="score-valor">${entrada.score.toLocaleString('es-CO')}</td>
                 <td>${entrada.poblacion ?? 0}</td>
                 <td>${entrada.felicidad ?? 0}%</td>
-                <td style="text-align:center">${entrada.turno}</td>
+                <td class="col-centrado">${entrada.turno}</td>
                 <td>${entrada.fecha ?? '—'}</td>
             </tr>
         `;
@@ -65,7 +64,7 @@ function renderizarTabla(top10, ciudadActualId) {
 
 // ── Card ciudad actual ───────────────────────────────────────
 
-function mostrarMiCiudad(top10, todas, ciudadActualId, ctrlRanking) {
+function mostrarMiCiudad(top10, ciudadActualId, ctrlRanking) {
     if (!ciudadActualId) return;
 
     const posicion = ctrlRanking.getPosicion(ciudadActualId);

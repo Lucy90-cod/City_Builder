@@ -529,3 +529,25 @@
     color:       var(--texto-secundario);
     margin-left: 4px;
 }
+
+/* ── Desglose de puntuación ──────────────────────────────────── */
+.desglose-titulo {
+    font-weight: 700;
+    color:       var(--texto-acento);
+}
+
+.desglose-seccion-positivo {
+    margin-top:  4px;
+    font-weight: 600;
+    color:       #4caf50;
+}
+
+.desglose-seccion-negativo {
+    margin-top:  4px;
+    font-weight: 600;
+    color:       #ef9a9a;
+}
+
+.valor-positivo {
+    color: #4caf50;
+}

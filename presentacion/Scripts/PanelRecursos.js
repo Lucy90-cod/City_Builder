@@ -242,7 +242,7 @@ export class PanelRecursos {
 
             ${desglose ? `
                 <hr>
-                <div class="recurso-detalle-item" style="font-weight:700;color:var(--texto-acento)">
+                <div class="recurso-detalle-item desglose-titulo">
                     <span>🏆 Puntuación</span>
                     <span>${desglose.total?.toLocaleString() ?? 0}</span>
                 </div>
@@ -273,19 +273,19 @@ export class PanelRecursos {
                 </div>
 
                 ${desglose.bonificaciones?.length ? `
-                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#4caf50">
+                    <div class="recurso-detalle-item desglose-seccion-positivo">
                         <span>✨ Bonificaciones</span>
                     </div>
                     ${desglose.bonificaciones.map(b => `
                         <div class="recurso-detalle-item">
                             <span>${b.nombre}</span>
-                            <span style="color:#4caf50">+${b.valor}</span>
+                            <span class="valor-positivo">+${b.valor}</span>
                         </div>
                     `).join('')}
                 ` : ''}
 
                 ${desglose.penalizaciones?.length ? `
-                    <div class="recurso-detalle-item" style="margin-top:4px;font-weight:600;color:#ef9a9a">
+                    <div class="recurso-detalle-item desglose-seccion-negativo">
                         <span>⚠️ Penalizaciones</span>
                     </div>
                     ${desglose.penalizaciones.map(p => `

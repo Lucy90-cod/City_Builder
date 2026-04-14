@@ -161,3 +161,8 @@
     color:  var(--borde);
     margin: 0 6px;
 }
+
+/* ── Utilidades de tabla ─────────────────────────────────────── */
+.col-centrado {
+    text-align: center;
+}
