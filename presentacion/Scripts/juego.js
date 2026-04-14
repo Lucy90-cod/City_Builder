@@ -69,6 +69,10 @@ async function inicializar() {
 
     modalEdificio = new ModalEdificio(ctrlEdificio, renderer, Notificaciones);
     modalEdificio.init();
+    modalEdificio.setControladorMapa(ctrlMapa);
+    modalEdificio.setPostDemoler(() => {
+        PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
+    });
 
     PanelRecursos.actualizar(ciudad, null);
     PanelRecursos.actualizarFelicidad(ctrlCiudadano.getFelicidadPromedio());
@@ -171,14 +175,7 @@ function manejarClickCelda(x, y, celda) {
 
     if (modo === 'demolicion') {
         if (celda.isVia()) {
-            const res = ctrlMapa.eliminarVia(x, y);
-            if (res.ok) {
-                renderer.actualizarCelda(x, y);
-                PanelRecursos.actualizar(ciudad, ctrlTurno?.getCtrlRecurso());
-                Notificaciones.mostrarExito(res.mensaje);
-            } else {
-                Notificaciones.mostrarError(res.mensaje);
-            }
+            modalEdificio.abrirConfirmacionVia(x, y);
         } else if (celda.isEdificio()) {
             const edificio = ciudad.getEdificioPorId(celda.getEdificioId());
             if (edificio) {
@@ -308,6 +305,45 @@ function registrarEventos() {
     document.getElementById('btn-zoom-out')?.addEventListener('click', () => {
         celdaSize = Math.max(celdaSize - 8, 24);
         document.documentElement.style.setProperty('--celda-size', `${celdaSize}px`);
+    });
+
+    // ── Pinch zoom en el mapa (móvil / táctil) ────────────────────
+    const mapaScroll = document.getElementById('mapa-contenedor');
+    let pinchStartDist = 0;
+    let pinchStartCelda = 48;
+
+    function touchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.hypot(dx, dy);
+    }
+
+    function readCeldaSizePx() {
+        const raw = getComputedStyle(document.documentElement).getPropertyValue('--celda-size').trim();
+        const n   = parseInt(raw, 10);
+        return Number.isFinite(n) ? n : 48;
+    }
+
+    mapaScroll?.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            pinchStartDist  = touchDistance(e.touches);
+            pinchStartCelda = readCeldaSizePx();
+        }
+    }, { passive: true });
+
+    mapaScroll?.addEventListener('touchmove', (e) => {
+        if (e.touches.length !== 2 || pinchStartDist <= 0) return;
+        e.preventDefault();
+        const dist  = touchDistance(e.touches);
+        const ratio = dist / pinchStartDist;
+        let next    = Math.round(pinchStartCelda * ratio);
+        next = Math.max(24, Math.min(80, next));
+        document.documentElement.style.setProperty('--celda-size', `${next}px`);
+        celdaSize = next;
+    }, { passive: false });
+
+    mapaScroll?.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) pinchStartDist = 0;
     });
 
     // ── FAB: navegar al panel de construcción en móvil ───────────

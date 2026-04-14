@@ -46,16 +46,19 @@ export class NoticiasService {
             fuente: a.source_name || a.source_id || 'Desconocido',
             url: a.link || '#',
             imagen: a.image_url || null,
+            /** ISO 8601 desde NewsData (pubDate) — para timestamp en UI (HU-017) */
+            fechaIso: a.pubDate || null,
         }));
     }
 
     static #noticiasFallback() {
+        const ahora = new Date().toISOString();
         return [
-            { titulo: 'Homer pierde su trabajo en la planta nuclear', fuente: 'Springfield Gazette', url: '#', imagen: null },
-            { titulo: 'Bart vuelve a suspender en la escuela de Springfield', fuente: 'Springfield Gazette', url: '#', imagen: null },
-            { titulo: 'Lisa gana el concurso de saxofon del estado', fuente: 'Springfield Gazette', url: '#', imagen: null },
-            { titulo: 'Marge organiza feria de pasteles en el parque', fuente: 'Springfield Gazette', url: '#', imagen: null },
-            { titulo: 'Maggie protagoniza nuevo incidente con el chupete', fuente: 'Springfield Gazette', url: '#', imagen: null },
+            { titulo: 'Homer pierde su trabajo en la planta nuclear', descripcion: 'Última hora desde la planta nuclear de Springfield.', fuente: 'Springfield Gazette', url: '#', imagen: null, fechaIso: ahora },
+            { titulo: 'Bart vuelve a suspender en la escuela de Springfield', descripcion: 'El director Skinner no ha querido hacer comentarios.', fuente: 'Springfield Gazette', url: '#', imagen: null, fechaIso: ahora },
+            { titulo: 'Lisa gana el concurso de saxofon del estado', descripcion: 'Otra victoria para la hermana prodigio de la familia.', fuente: 'Springfield Gazette', url: '#', imagen: null, fechaIso: ahora },
+            { titulo: 'Marge organiza feria de pasteles en el parque', descripcion: 'Los vecinos esperan la receta secreta de donas glaseadas.', fuente: 'Springfield Gazette', url: '#', imagen: null, fechaIso: ahora },
+            { titulo: 'Maggie protagoniza nuevo incidente con el chupete', descripcion: 'Bebé a salvo tras el enésimo percance doméstico.', fuente: 'Springfield Gazette', url: '#', imagen: null, fechaIso: ahora },
         ];
     }
 }

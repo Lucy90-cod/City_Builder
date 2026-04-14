@@ -142,6 +142,10 @@
                     <span>💼 Desempleados</span>
                     <span id="stat-desempleados">0</span>
                 </div>
+                <div class="stat-ciudadanos">
+                    <span>🏘 Edificios residenciales</span>
+                    <span id="stat-edificios-residenciales">0</span>
+                </div>
                 <div id="homer-panel" class="homer-panel"></div>
             </section>
         </aside>
@@ -160,6 +164,20 @@
                 <span id="val-score">0</span>
             </div>
         </main>
+
+        <!-- Recursos / puntuación y noticias: visible solo en móvil (≤767px) -->
+        <div class="panel-movil-extras" aria-label="Recursos, puntuación y noticias">
+            <details class="detalle-movil-recursos">
+                <summary class="detalle-movil-summary">📊 Recursos y puntuación</summary>
+                <div id="recursos-detalle-movil" class="recursos-detalle-movil-inner"></div>
+            </details>
+            <section class="widget widget-noticias-movil-bloque">
+                <h2 class="panel-titulo titulo-noticias-movil">📰 Noticias</h2>
+                <div id="widget-noticias-movil" class="noticias-carrusel">
+                    <p class="widget-placeholder">Cargando noticias...</p>
+                </div>
+            </section>
+        </div>
 
         <!-- SIDEBAR DERECHA -->
         <aside class="sidebar-derecha">

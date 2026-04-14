@@ -51,10 +51,12 @@ export class ClimaService {
      * @returns {{ temperatura, descripcion, icono, humedad, viento, ciudad }}
      */
     static formatear(data) {
+        const codigo = data.weather?.[0]?.icon ?? '01d';
         return {
             temperatura:  Math.round(data.main?.temp ?? 0),
             descripcion:  data.weather?.[0]?.description ?? 'sin datos',
-            icono:        `https://openweathermap.org/img/wn/${data.weather?.[0]?.icon ?? '01d'}@2x.png`,
+            codigoIcono:  codigo,
+            icono:        `https://openweathermap.org/img/wn/${codigo}@2x.png`,
             humedad:      data.main?.humidity ?? 0,
             viento:       Math.round((data.wind?.speed ?? 0) * 3.6), // m/s a km/h
             ciudad:       data.name ?? 'Springfield',
@@ -66,6 +68,7 @@ export class ClimaService {
         return {
             temperatura:  22,
             descripcion:  'Springfield — datos no disponibles',
+            codigoIcono:  '02d',
             icono:        'assets/fondo/clima_default.png',
             humedad:      60,
             viento:       10,

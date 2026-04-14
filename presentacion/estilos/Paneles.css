@@ -283,6 +283,21 @@
 .notif-cerrar:hover { color: var(--texto-primario); }
 
 /* ── Widget clima ─────────────────────────────────────────── */
+.tarjeta-clima {
+    display:     flex;
+    align-items: flex-start;
+    gap:         12px;
+}
+
+.clima-icono-wrap {
+    flex-shrink:     0;
+    width:           56px;
+    height:          56px;
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+}
+
 .clima-contenido {
     display:     flex;
     align-items: center;
@@ -290,7 +305,100 @@
     margin-bottom: 8px;
 }
 
-.clima-icono { width: 48px; height: 48px; }
+.clima-icono {
+    width:       48px;
+    height:      48px;
+    display:     block;
+    will-change: transform, filter;
+}
+
+/* HU-016: icono animado (PNG de la API + animación CSS) */
+.clima-icono-animado {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.18));
+}
+
+.clima-anim--pulso {
+    animation: clima-pulso 2.4s ease-in-out infinite;
+}
+
+.clima-anim--sol {
+    animation: clima-sol 3s ease-in-out infinite;
+}
+
+.clima-anim--nubes {
+    animation: clima-flotar 3.5s ease-in-out infinite;
+}
+
+.clima-anim--nublado {
+    animation: clima-flotar-lento 4.5s ease-in-out infinite;
+}
+
+.clima-anim--lluvia {
+    animation: clima-lluvia 1.8s ease-in-out infinite;
+}
+
+.clima-anim--tormenta {
+    animation: clima-tormenta 2s ease-in-out infinite;
+}
+
+.clima-anim--nieve {
+    animation: clima-nieve 2.5s ease-in-out infinite;
+}
+
+.clima-anim--niebla {
+    animation: clima-niebla 4s ease-in-out infinite;
+}
+
+@keyframes clima-pulso {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.08); opacity: 0.92; }
+}
+
+@keyframes clima-sol {
+    0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 2px 8px rgba(255, 180, 50, 0.35)); }
+    50%      { transform: scale(1.1) rotate(4deg); filter: drop-shadow(0 4px 14px rgba(255, 200, 80, 0.5)); }
+}
+
+@keyframes clima-flotar {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+}
+
+@keyframes clima-flotar-lento {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-3px) scale(1.04); }
+}
+
+@keyframes clima-lluvia {
+    0%, 100% { transform: translateY(0); }
+    25%      { transform: translateY(2px); }
+    75%      { transform: translateY(-2px); }
+}
+
+@keyframes clima-tormenta {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    20%      { transform: translate(-2px, 1px) scale(1.05); }
+    40%      { transform: translate(2px, -1px) scale(1.02); }
+    60%      { transform: translate(-1px, -2px) scale(1.06); }
+    80%      { transform: translate(1px, 2px) scale(1.03); }
+}
+
+@keyframes clima-nieve {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33%      { transform: translateY(3px) rotate(-3deg); }
+    66%      { transform: translateY(-2px) rotate(3deg); }
+}
+
+@keyframes clima-niebla {
+    0%, 100% { transform: scale(1); opacity: 1; filter: blur(0); }
+    50%      { transform: scale(1.05); opacity: 0.85; filter: blur(0.3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clima-icono-animado {
+        animation: none !important;
+    }
+}
 
 .clima-datos {
     display:        flex;
@@ -316,25 +424,70 @@
     padding-top:   8px;
 }
 
-/* ── Widget noticias ──────────────────────────────────────── */
-.noticia-item {
-    padding:       8px 0;
-    border-bottom: 1px solid var(--borde);
+/* ── Widget noticias (HU-017: thumb, fecha, carrusel móvil) ─── */
+#widget-noticias .noticia-item {
+    display:               grid;
+    grid-template-columns: 76px 1fr;
+    gap:                   10px;
+    align-items:           start;
+    padding:               10px 0;
+    border-bottom:         1px solid var(--borde);
 }
-.noticia-item:last-child { border-bottom: none; }
+#widget-noticias .noticia-item--sin-thumb {
+    grid-template-columns: 1fr;
+}
+#widget-noticias .noticia-item:last-child { border-bottom: none; }
+
+.noticia-thumb {
+    width:         76px;
+    height:        56px;
+    border-radius: var(--radio, 6px);
+    overflow:      hidden;
+    background:    var(--borde, #e0e0e0);
+    flex-shrink:   0;
+}
+.noticia-thumb img {
+    width:      100%;
+    height:     100%;
+    object-fit: cover;
+    display:    block;
+}
+
+.noticia-cuerpo { min-width: 0; }
 
 .noticia-titulo {
-    display:     block;
-    font-size:   0.82rem;
-    color:       var(--texto-primario);
-    line-height: 1.4;
-    margin-bottom: 3px;
+    display:       block;
+    font-size:     0.82rem;
+    color:         var(--texto-primario);
+    line-height:   1.35;
+    margin:        0 0 4px 0;
+    font-weight:   600;
 }
 .noticia-titulo:hover { color: var(--texto-acento); }
 
+.noticia-meta {
+    font-size:     0.7rem;
+    color:         var(--texto-secundario);
+    margin:        0 0 4px 0;
+    line-height:   1.3;
+}
+.noticia-fecha { font-variant-numeric: tabular-nums; }
+.noticia-meta-sep { opacity: 0.7; }
+
 .noticia-fuente {
-    font-size: 0.72rem;
-    color:     var(--texto-secundario);
+    font-size:   inherit;
+    color:       inherit;
+}
+
+.noticia-descripcion {
+    font-size:   0.78rem;
+    color:       var(--texto-secundario);
+    line-height: 1.45;
+    margin:      0;
+    display:     -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow:    hidden;
 }
 
 .dinero-verde    { color: #4caf50; font-weight: bold; }

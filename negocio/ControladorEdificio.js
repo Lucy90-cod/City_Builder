@@ -149,14 +149,19 @@ export class ControladorEdificio {
     /**
      * Descuenta el costo de mantenimiento de cada edificio activo.
      * Llamado en cada turno por ControladorTurno (paso 3).
+     * @returns {number} total de mantenimiento descontado en el turno
      */
     aplicarMantenimiento() {
         const recurso = this.#ciudad.getRecurso();
+        let total = 0;
         this.#ciudad.getEdificios().forEach(e => {
             if (e.isActivo()) {
-                recurso.addMoney(-e.getCostoMantenimiento());
+                const m = e.getCostoMantenimiento();
+                total += m;
+                recurso.addMoney(-m);
             }
         });
+        return total;
     }
 
     // ── Consultas ────────────────────────────────────────────

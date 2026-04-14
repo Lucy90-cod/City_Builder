@@ -12,6 +12,20 @@ ClimaService.setApiKey('c6b1a6cf379dda5f9ff2cc7fbbc65acc');
 
 const TIEMPO_ACTUALIZACION = 30 * 60 * 1000; //tiempo, milisegundos
 
+/** Clase CSS de animación según código OpenWeatherMap (p. ej. 01d, 10n) — HU-016 icono animado */
+function claseAnimacionIcono(codigo) {
+    if (!codigo || String(codigo).length < 2) return 'clima-anim--pulso';
+    const id = String(codigo).slice(0, 2);
+    if (id === '01') return 'clima-anim--sol';
+    if (id === '02') return 'clima-anim--nubes';
+    if (id === '03' || id === '04') return 'clima-anim--nublado';
+    if (id === '09' || id === '10') return 'clima-anim--lluvia';
+    if (id === '11') return 'clima-anim--tormenta';
+    if (id === '13') return 'clima-anim--nieve';
+    if (id === '50') return 'clima-anim--niebla';
+    return 'clima-anim--pulso';
+}
+
 // ── Funciones de render ──────────────────────────────────────
 
 function renderCargando(contenedor, region) {
@@ -33,9 +47,15 @@ function renderError(contenedor, region, mensaje = 'No fue posible cargar el cli
 }
 
 function renderClima(contenedor, region, clima) {
+    const codigo = clima.codigoIcono ?? '01d';
+    const anim   = claseAnimacionIcono(codigo);
     contenedor.innerHTML = `
         <div class="tarjeta-clima">
-            <img src="${clima.icono}" alt="${clima.descripcion}" class="clima-icono">
+            <div class="clima-icono-wrap" aria-hidden="true">
+                <img src="${clima.icono}" alt="${clima.descripcion}"
+                    class="clima-icono clima-icono-animado ${anim}"
+                    data-clima-icon="${codigo}">
+            </div>
             <div class="clima-datos">
                 <p><strong>Región:</strong> ${region}</p>
                 <p><strong>Temperatura:</strong> ${clima.temperatura} °C</p>
