@@ -113,15 +113,40 @@ export class ControladorCiudadano {
     actualizarFelicidad() {
         const edificios = this.#ciudad.getEdificios();
 
-        // HU-013: contar todos los servicios y parques activos en la ciudad (sin radio)
-        const totalServicios = edificios.filter(e => e.getTipo() === 'servicio' && e.isActivo()).length;
-        const totalParques   = edificios.filter(e => e.getTipo() === 'parque'   && e.isActivo()).length;
+        // Mapa id → posicion para lookup O(1)
+        const posiciones = new Map();
+        edificios.forEach(e => posiciones.set(e.getId(), e.getPosicion()));
+
+        // Servicios activos con su radio individual
+        const serviciosActivos = edificios.filter(e => e.getTipo() === 'servicio' && e.isActivo());
+
+        // Parques siguen afectando a todos (sin radio)
+        const totalParques = edificios.filter(e => e.getTipo() === 'parque' && e.isActivo()).length;
 
         const sinAlimentos = (this.#ciudad.getRecurso()?.getFood() ?? 1) <= 0;
 
         this.#ciudad.getCiudadanos().forEach(ciudadano => {
+            // Posicion del ciudadano = posicion de su vivienda
+            const residencialId = ciudadano.getEdificioResidencialId();
+            const posHome       = residencialId ? posiciones.get(residencialId) : null;
+
+            // Contar servicios dentro del radio (distancia Chebyshev)
+            let serviciosCercanos = 0;
+            if (posHome) {
+                for (const servicio of serviciosActivos) {
+                    const pos = servicio.getPosicion();
+                    const dist = Math.max(
+                        Math.abs(pos.x - posHome.x),
+                        Math.abs(pos.y - posHome.y)
+                    );
+                    if (dist <= servicio.getRadio()) {
+                        serviciosCercanos++;
+                    }
+                }
+            }
+
             ciudadano.calcularFelicidad({
-                serviciosCercanos:        totalServicios,
+                serviciosCercanos,
                 parquesCercanos:          totalParques,
                 beneficioServicio:        10,
                 beneficioParque:          5,

@@ -28,6 +28,8 @@ const selectTamano = document.getElementById('select-tamano');
 const panelColombia = document.getElementById('panel-colombia');
 const panelCoordenadas = document.getElementById('panel-coordenadas');
 const radios = document.querySelectorAll('input[name="modo-region"]');
+const imgLogo = document.getElementById('img-logo');
+if (imgLogo) imgLogo.addEventListener('error', () => { imgLogo.style.display = 'none'; });
 const inputArchivoMapa = document.getElementById('input-archivo-mapa');
 const btnCargarMapa = document.getElementById('btn-cargar-mapa');
 const nombreArchivo = document.getElementById('nombre-archivo-mapa');
